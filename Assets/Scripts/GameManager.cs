@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,10 +12,43 @@ public class GameManager : MonoBehaviour
     private Entity _currentEntity;
     private float _entitySpawnDelay = 0.5f;
 
-    
+    [Header("Core")]
+    private InputSystem_Actions _inputMap;
+    private CursorManager _cursorManager;
+
+    [Header("Test")]
+    public Action Delegate;
+
+    private void Awake()
+    {
+        this.gameObject.AddComponent<CursorManager>();
+        _cursorManager = GetComponent<CursorManager>();
+
+        InitInputs();
+    }
+
+    private void OnEnable()
+    {
+        _inputMap.Enable();
+    }
+
+    private void Update()
+    {
+        Delegate?.Invoke();   
+    }
+
+    private void OnDisable()
+    {
+        _inputMap?.Disable();
+    }
+
+    private void InitInputs()
+    {
+        _inputMap = new();
+
+        _inputMap.Player.Cursor.performed += callback => _cursorManager.KnowMousePos(callback);
+    }
 }
-
-
 public class ResourceData : ScriptableObject
 {
     [SerializeField] private string _name;
@@ -31,10 +65,21 @@ public class ResourceData : ScriptableObject
     public int Index => _index;
 }
 
-public class Inventory
+public abstract class Inventory : MonoBehaviour
 {
 
 }
+
+public class MainInventory : Inventory
+{
+
+}
+public class CycleInventory : Inventory
+{
+
+}
+
+public class FightInventory : Inventory { }
 
 public class ItemSlot : MonoBehaviour
 {
@@ -47,10 +92,6 @@ public class ItemSlot : MonoBehaviour
     {
         
     }
-}
-public class CursorManager : MonoBehaviour // для Raycast
-{
-    
 }
 
 public class Entity
