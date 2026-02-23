@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(CursorManager))]
 public class GameManager : MonoBehaviour
 {
     [Header("Player")]
@@ -11,18 +15,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform _entitySpawnPos;
     private Entity _currentEntity;
     private float _entitySpawnDelay = 0.5f;
+    [SerializeField] private Dictionary<int, Entity> _entities = new(); // id + entity
 
     [Header("Core")]
     private InputSystem_Actions _inputMap;
     private CursorManager _cursorManager;
 
     [Header("Test")]
-    public Action Delegate;
+    public Action EveryFrame;
+
+    [Header("Inventory")]
+    [SerializeField] private List<ItemData> _itemInventory = new();
 
     private void Awake()
     {
-        this.gameObject.AddComponent<CursorManager>();
         _cursorManager = GetComponent<CursorManager>();
+        _cursorManager.Init();
+
+        EveryFrame += _cursorManager.CheckForInteract;
 
         InitInputs();
     }
@@ -34,12 +44,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        Delegate?.Invoke();   
+        //EveryFrame?.Invoke();
     }
 
     private void OnDisable()
     {
         _inputMap?.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        EveryFrame -= _cursorManager.CheckForInteract;
     }
 
     private void InitInputs()
@@ -48,72 +63,40 @@ public class GameManager : MonoBehaviour
 
         _inputMap.Player.Cursor.performed += callback => _cursorManager.KnowMousePos(callback);
     }
-}
-public class ResourceData : ScriptableObject
-{
-    [SerializeField] private string _name;
-    [SerializeField] private Sprite _sprite;
-    [SerializeField] private int _count;
-
-    [SerializeField] private int _index;
-
-    [SerializeField] private ResourceData _reverseResource; // shifter, skinwalker
-
-    public string Name => _name;
-    public Sprite Sprite => _sprite;
-    public int Count => _count;
-    public int Index => _index;
-}
-
-public abstract class Inventory : MonoBehaviour
-{
-
-}
-
-public class MainInventory : Inventory
-{
-
-}
-public class CycleInventory : Inventory
-{
-
-}
-
-public class FightInventory : Inventory { }
-
-public class ItemSlot : MonoBehaviour
-{
-    private ResourceData _resource;
-
-
-    public ResourceData Resource => _resource;
-
-    private void OnMouseUpAsButton()
+    
+    private void Game()
     {
-        
+
     }
 }
 
-public class Entity
+// zalupa
+//[RequireComponent(typeof(Image), typeof(TMP_Text))]
+//public class ItemSlot : MonoBehaviour
+//{
+//    public ItemData ItemData => _item;
+
+//    private ItemData _item;
+//    private Image _image;
+//    private TMP_Text _tmpTextCount;
+
+//    public void Init(ItemData item)
+//    {
+//        _item = item; 
+//        _image = GetComponent<Image>();
+//        _tmpTextCount = GetComponent<TMP_Text>();
+
+//        _image.sprite = _item.Sprite;
+//        _tmpTextCount.text = _item.Count.ToString();
+//    }
+//}
+
+public class EntityData : ScriptableObject
 {
 
 }
 
-//public class StateManager
-//{
-
-//}
-
-
-//public class AFKHandler { } // когда игра закрыта
-
-//public class Inventory { } // 
-
-//public class Cycle { } // 
-
-//public class GUI : MonoBehaviour
-//{
-
-//}
-
-//public class NPC { }
+public class Entity : MonoBehaviour
+{
+    [SerializeField] private bool _isAlive = false;
+}

@@ -4,49 +4,29 @@ using UnityEngine.InputSystem;
 public class CursorManager : MonoBehaviour // для Raycast
 {
     private Camera _mainCamera;
-
     private Vector2 _cursorPos;
+
+    public void Init()
+    {
+        _mainCamera = Camera.main;
+    }
 
     private void OnEnable()
     {
         _mainCamera = Camera.main;
-        _gameManager = FindAnyObjectByType<GameManager>();
-
-        _gameManager.Delegate += CheckForInteract;
     }
-
-    private GameManager _gameManager;
 
     public void KnowMousePos(InputAction.CallbackContext callback)
     {
         _cursorPos = callback.ReadValue<Vector2>();
-        print(_cursorPos);
+        //Debug.Log(_cursorPos);
     }
 
-    private void CheckForInteract()
+    public void CheckForInteract()
     {
-        
+        Vector2 worldPos = _mainCamera.ScreenToWorldPoint(_cursorPos);
 
-        //RaycastHit2D hit = Physics2D.Raycast();
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+        Debug.Log(hit.collider);
     }
-
 }
-
-//public class StateManager
-//{
-
-//}
-
-
-//public class AFKHandler { } // когда игра закрыта
-
-//public class Inventory { } // 
-
-//public class Cycle { } // 
-
-//public class GUI : MonoBehaviour
-//{
-
-//}
-
-//public class NPC { }
