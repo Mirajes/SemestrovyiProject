@@ -1,26 +1,38 @@
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "Scriptable Objects/ItemData")]
 public class ItemData : ScriptableObject
 {
-    [SerializeField] private string _name;
-    [SerializeField] private string _description;
-    [SerializeField] private Sprite _sprite;
+
+
+    // SerializedDictionary
+    [SerializedDictionary("EntityData", "Chance")]
+    public SerializedDictionary<EntityData, float> _chanceMaker = new();
+
+    [SerializedDictionary("EntityData", "IsCanChangeChance")]
+    public SerializedDictionary<EntityData, bool> _isCanChanceBeChanged = new();
+
+    private void OnValidate()
+    {
+        foreach (var entity in _chanceMaker.Keys)
+        {
+            if (_isCanChanceBeChanged.ContainsKey(entity)) continue;
+
+            _isCanChanceBeChanged.Add(entity, false);
+        }
+    }
+
+
 
     [SerializeField] private int _count;
-    [SerializeField] private Entity _entity;
-    [SerializeField] private Entity _reversedEntity;
-    //private int _index;
-
-    public string Name => _name;
-    public string Description => _description;
-    public Sprite Sprite => _sprite;
-    public int Count => _count;
-    public Entity Entity => _entity;
-    public Entity ReversedEntity => _reversedEntity;
-
-    private void OnEnable()
+    public void AddItem(int amount)
     {
-        if (_reversedEntity == null) _reversedEntity = _entity;
+        _count += amount;
+    }
+
+    public void RemoveItem(int amount)
+    {
+        _count -= amount;
     }
 }
