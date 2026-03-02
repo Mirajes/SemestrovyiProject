@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6abd891087d9cc46b0646c9638f0346, type: 3}
   m_Name: Instrument
   m_EditorClassIdentifier: 
+  _name: someInstrument
+  _description: 
+  _count: 1
   _chanceMaker:
     _serializedList:
     - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}

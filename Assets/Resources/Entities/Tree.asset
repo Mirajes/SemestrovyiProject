@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c323224053e494dbce1cd49b114773, type: 3}
   m_Name: Tree
   m_EditorClassIdentifier: 
+  _name: Tree
+  _description: 
+  _sprite: {fileID: 0}
+  _dropResource: []
+  _entityPrefab: {fileID: 0}
+  _reversedEntity: {fileID: 0}

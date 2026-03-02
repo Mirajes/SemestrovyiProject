@@ -4,6 +4,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemData", menuName = "Scriptable Objects/ItemData")]
 public class ItemData : ScriptableObject
 {
+    [Header("Main")]
+    [SerializeField] private string _name;
+    [SerializeField] private string _description;
+    [SerializeField] private int _count;
+    public void AddItem(int amount)
+    {
+        _count += amount;
+    }
+
+    public void RemoveItem(int amount)
+    {
+        _count -= amount;
+    }
 
 
     // SerializedDictionary
@@ -21,18 +34,5 @@ public class ItemData : ScriptableObject
 
             _isCanChanceBeChanged.Add(entity, false);
         }
-    }
-
-
-
-    [SerializeField] private int _count;
-    public void AddItem(int amount)
-    {
-        _count += amount;
-    }
-
-    public void RemoveItem(int amount)
-    {
-        _count -= amount;
     }
 }
