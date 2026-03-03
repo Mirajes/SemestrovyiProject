@@ -12,4 +12,16 @@ public class EntityData : ScriptableObject
 
     [SerializeField] private GameObject _entityPrefab;
     [SerializeField] private EntityData _reversedEntity;
+
+    private void OnValidate()
+    {
+        if (_reversedEntity == null) _reversedEntity = this;
+    }
+
+    public string Name => _name;
+    public string Description => _description;
+    public Sprite Sprite => _sprite;
+    public List<ItemData> DropResource => _dropResource;
+    public GameObject EntityPrefab => _entityPrefab;
+    public EntityData ReversedEntity => _reversedEntity;
 }

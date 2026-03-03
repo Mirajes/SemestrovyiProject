@@ -1,16 +1,24 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
+[RequireComponent(typeof(CursorManager))]
 public class GameManager : MonoBehaviour
 {
     [Header("Main")]
     private InputSystem_Actions _inputMap;
-    private CursorManager _cursor;
+    private CursorManager _cursorManager;
     private StateManager _stateManager = new();
+    private GambleManager _gambleManager = new();
+    private CancellationTokenSource _cts = new();
+
+    [Header("Support")]
+    [SerializeField] private Transform _entitySpawnPos;
 
     [Header("Inventory")]
-    private List<ItemData> _inventoryMain;
+    private List<ItemData> _inventoryMain = new();
 
     private List<ItemData> _cycleOrder = new();
     private int _maxCycleOrderCapacity = 3;
@@ -20,7 +28,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _cursor = new(Camera.main);
+        _cursorManager = GetComponent<CursorManager>();
+        _cursorManager.Init(Camera.main);
 
         InitControlls();
     }
@@ -32,7 +41,14 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        // stop input and cancel any running async loops
         RemoveControlls();
+        if (_cts != null)
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = null;
+        }
     }
 
     #region Controlls
@@ -40,7 +56,7 @@ public class GameManager : MonoBehaviour
     {
         _inputMap = new();
 
-        _inputMap.Player.Cursor.performed += _cursor.KnowMousePos;
+        _inputMap.Player.Cursor.performed += _cursorManager.KnowMousePos;
 
         _inputMap.Enable();
     }
@@ -56,47 +72,51 @@ public class GameManager : MonoBehaviour
         ItemData someItem = Resources.Load<ItemData>("Items/Instrument");
         _cycleOrder.Add(someItem);
 
-
+        _stateManager.ChangeState("Cycle");
 
         switch (_stateManager.State)
         {
             case "Cycle":
+                CycleTick(_cts.Token).Forget();
                 break;
             case "Home":
                 break;
             default:
                 Debug.Log("where");
-                break;
+                break; 
         }
     }
 
-    private async UniTask GameTick()
+    // copilot помог
+    private async UniTask CycleTick(CancellationToken token)
     {
+        try
+        {
+            // keep running until cancelled
+            while (true)
+            {
+                // iterate over a snapshot so the collection can be modified elsewhere
+                foreach (ItemData item in _cycleOrder.ToArray())
+                {
+                    token.ThrowIfCancellationRequested();
 
+                    EntityData entity = _gambleManager.RollEntity(item);
+                    if (entity == null || entity.EntityPrefab == null)
+                        continue;
+
+                    GameObject spawned = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
+
+                    // wait until the spawned object is destroyed OR the token is cancelled
+                    // UnityEngine.Object == null works for destroyed objects
+                    await UniTask.WaitWhile(() => spawned != null, cancellationToken: token);
+                }
+                // when finished all items, the outer while(true) will restart the foreach
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // cancellation requested - exit gracefully
+            Console.WriteLine("смотри проблема 0_0");
+        }
     }
-}
-
-public class GambleManager
-{
-    public void RollEntity(ItemData item)
-    {
-        float totalChance = 0f;
-        foreach (float chance in item._chanceMaker.Values)
-            totalChance += chance;
-
-        float random = Random.value;        
-    }
-}
-
-public class StateManager
-{
-    private string _state;
-    public string State => _state;
-
-    public void ChangeState(string state) { _state = state; }
-}
-
-public class GUI : MonoBehaviour
-{
-    
 }

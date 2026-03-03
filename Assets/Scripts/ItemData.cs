@@ -34,5 +34,22 @@ public class ItemData : ScriptableObject
 
             _isCanChanceBeChanged.Add(entity, false);
         }
+
+        //float totalChance = 0f;
+        //int changeableCount = _chanceMaker.Count;
+
+        //foreach (var entity in _chanceMaker.Keys)
+        //{
+        //    if (_isCanChanceBeChanged[entity]) { changeableCount--; continue; }
+
+        //    totalChance += _chanceMaker[entity];
+        //}
+
+        //foreach (var item in _chanceMaker.Keys)
+        //{
+        //    if (_isCanChanceBeChanged[item]) continue;
+
+        //    _chanceMaker[item] = totalChance / changeableCount;
+        //}
     }
 }

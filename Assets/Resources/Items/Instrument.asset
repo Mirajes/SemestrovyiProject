@@ -18,9 +18,9 @@ MonoBehaviour:
   _chanceMaker:
     _serializedList:
     - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
-      Value: 0.5
+      Value: 0.85
     - Key: {fileID: 11400000, guid: 54de776f56390084f8a159186219af02, type: 2}
-      Value: 0.5
+      Value: 0.15
   _isCanChanceBeChanged:
     _serializedList:
     - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}

@@ -16,5 +16,5 @@ MonoBehaviour:
   _description: 
   _sprite: {fileID: 0}
   _dropResource: []
-  _entityPrefab: {fileID: 0}
-  _reversedEntity: {fileID: 0}
+  _entityPrefab: {fileID: 4311137889150975959, guid: ea3704ac2994c444e99eb67c2ce3d78b, type: 3}
+  _reversedEntity: {fileID: 11400000}

@@ -1,10 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CursorManager // для Raycast
+public class CursorManager : MonoBehaviour // для Raycast
 {
     private Camera _mainCamera;
     private Vector2 _cursorPos;
+
+    public void Init(Camera mainCamera)
+    {
+        _mainCamera = mainCamera;
+    }
 
     public void KnowMousePos(InputAction.CallbackContext callback)
     {
@@ -17,10 +22,5 @@ public class CursorManager // для Raycast
         Vector2 worldPos = _mainCamera.ScreenToWorldPoint(_cursorPos);
 
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-    }
-
-    public CursorManager(Camera mainCamera)
-    {
-        _mainCamera = mainCamera;
     }
 }
