@@ -10,21 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6abd891087d9cc46b0646c9638f0346, type: 3}
-  m_Name: Instrument
+  m_Name: Stone
   m_EditorClassIdentifier: 
-  _name: someInstrument
+  _name: stone
   _description: 
-  _sprite: {fileID: 21300000, guid: c6f723a8cfae7874e945d486cb1569ed, type: 3}
-  _count: 1
+  _sprite: {fileID: 21300000, guid: 943a1cf597dcdf64697e7b02bba9866c, type: 3}
+  _count: 0
   _chanceMaker:
     _serializedList:
-    - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
-      Value: 1
     - Key: {fileID: 11400000, guid: 54de776f56390084f8a159186219af02, type: 2}
       Value: 0
   _isCanChanceBeChanged:
     _serializedList:
-    - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
-      Value: 0
     - Key: {fileID: 11400000, guid: 54de776f56390084f8a159186219af02, type: 2}
       Value: 0

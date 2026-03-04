@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -14,10 +15,14 @@ public class GameManager : MonoBehaviour
     private GambleManager _gambleManager = new();
     private CancellationTokenSource _cts = new();
 
+    [Header("UI")]
+    [SerializeField] private GUI _gameUI;
+
     [Header("Support")]
     [SerializeField] private Transform _entitySpawnPos;
 
     [Header("Inventory")]
+    private List<ItemData> _itemsDatas;
     private List<ItemData> _inventoryMain = new();
 
     private List<ItemData> _cycleOrder = new();
@@ -32,6 +37,12 @@ public class GameManager : MonoBehaviour
         _cursorManager.Init(Camera.main);
 
         InitControlls();
+
+        _itemsDatas = Resources.LoadAll<ItemData>("Items").ToList();
+
+        if (_gameUI == null) { Debug.LogWarning("Gde GUI"); return; }
+        _gameUI.Init();
+        _gameUI.InitInventoryCanvas(_itemsDatas);
     }
 
     private void Start()
@@ -102,9 +113,9 @@ public class GameManager : MonoBehaviour
 
                     EntityData entity = _gambleManager.RollEntity(item);
                     if (entity == null || entity.EntityPrefab == null)
-                        continue;
+                        { Debug.Log("no entity or prefab"); continue; }
 
-                    GameObject spawned = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
+                    Entity spawned = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
 
                     // wait until the spawned object is destroyed OR the token is cancelled
                     // UnityEngine.Object == null works for destroyed objects
@@ -112,11 +123,11 @@ public class GameManager : MonoBehaviour
                 }
                 // when finished all items, the outer while(true) will restart the foreach
             }
-        }
+    }
         catch (OperationCanceledException)
         {
             // cancellation requested - exit gracefully
-            Console.WriteLine("смотри проблема 0_0");
+            //Debug.LogError("смотри проблема 0_0");
         }
     }
 }
