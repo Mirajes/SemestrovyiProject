@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _cursorManager = GetComponent<CursorManager>();
-        _cursorManager.Init(Camera.main);
 
         InitControlls();
 
