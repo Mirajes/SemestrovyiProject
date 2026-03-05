@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     {
         print("on me");
         
+        _contextMenu.SetActive(true);
     }
 
     private void OnMouseUp()
@@ -17,11 +18,18 @@ public class Player : MonoBehaviour
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(CursorManager.CursorPos);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-        if (hit.transform.TryGetComponent<Interactable>(out Interactable button))
+        if (hit.collider != null)
         {
-            button.OpenMenu("sosal");
-            _contextMenu.SetActive(false);
+            hit.collider.TryGetComponent<Interactable>(out Interactable button);
+
+            if (button != null)
+            {
+                button.Invoke();
+
+                print("mouse");
+            }
         }
+        _contextMenu.SetActive(false);
     }
 
     private void OnMouseDrag()
@@ -30,10 +38,3 @@ public class Player : MonoBehaviour
     }
 }
 
-public class Interactable : MonoBehaviour
-{
-    public void OpenMenu(string menuName)
-    {
-
-    }
-}

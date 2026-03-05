@@ -5,9 +5,11 @@ public class CursorManager : MonoBehaviour // для Raycast
 {
     public static Vector2 CursorPos => _cursorPos;
     public static bool IsAttacking => _isAttacking;
+    public static float CursorSpeed => _cursorSpeed;
 
     private static Vector2 _cursorPos;
     private static bool _isAttacking = false;
+    private static float _cursorSpeed = 0f;
 
     public void KnowMousePos(InputAction.CallbackContext context)
     {
@@ -26,6 +28,5 @@ public class CursorManager : MonoBehaviour // для Raycast
     public void OnAttackInput(InputAction.CallbackContext context)
     {
         _isAttacking = context.ReadValueAsButton();
-        print(_isAttacking);
     }
 }
