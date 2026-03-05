@@ -68,6 +68,9 @@ public class GameManager : MonoBehaviour
 
         _inputMap.Player.Cursor.performed += _cursorManager.KnowMousePos;
 
+        _inputMap.Player.Attack.started += _cursorManager.OnAttackInput;
+        _inputMap.Player.Attack.canceled += _cursorManager.OnAttackInput;
+
         _inputMap.Enable();
     }
     private void RemoveControlls()

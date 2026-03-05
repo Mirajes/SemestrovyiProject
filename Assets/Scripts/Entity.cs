@@ -13,4 +13,14 @@ public class Entity : MonoBehaviour
     {
         
     }
+
+    private void OnMouseEnter()
+    {
+        
+    }
+
+    private void OnMouseExit()
+    {
+        print("mouse came out");
+    }
 }
