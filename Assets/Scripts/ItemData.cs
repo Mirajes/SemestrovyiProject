@@ -8,12 +8,14 @@ public class ItemData : ScriptableObject
     public string Description => _description;
     public Sprite Sprite => _sprite;
     public int Count => _count;
+    public bool IsCanBeCrafted => _isCanBeCrafted;
 
     [Header("Main")]
     [SerializeField] private string _name;
     [SerializeField] private string _description;
     [SerializeField] private Sprite _sprite;
     [SerializeField] private int _count;
+    [SerializeField] private bool _isCanBeCrafted;
 
     public void AddItem(int amount)
     {
@@ -28,35 +30,43 @@ public class ItemData : ScriptableObject
 
     // SerializedDictionary
     [SerializedDictionary("EntityData", "Chance")]
-    public SerializedDictionary<EntityData, float> _chanceMaker = new();
+    public SerializedDictionary<EntityData, float> ChanceMaker = new();
 
     [SerializedDictionary("EntityData", "IsCanChangeChance")]
-    public SerializedDictionary<EntityData, bool> _isCanChanceBeChanged = new();
+    public SerializedDictionary<EntityData, bool> IsCanChanceBeChanged = new();
 
-    private void OnValidate()
-    {
-        foreach (var entity in _chanceMaker.Keys)
-        {
-            if (_isCanChanceBeChanged.ContainsKey(entity)) continue;
+    [SerializedDictionary("ItemResource", "RequiredCount")]
+    public SerializedDictionary<ItemData, int> ItemReceipt = new();
 
-            _isCanChanceBeChanged.Add(entity, false);
-        }
+    //private void OnValidate()
+    //{
+    //    if (!_isCanBeCrafted) // очистка рецепта если нельзя скрафтить
+    //    {
+    //        ItemReceipt.Clear();
+    //    }
 
-        //float totalChance = 0f;
-        //int changeableCount = _chanceMaker.Count;
+    //    //foreach (var entity in ChanceMaker.Keys)
+    //    //{
+    //    //    if (IsCanChanceBeChanged.ContainsKey(entity)) continue;
 
-        //foreach (var entity in _chanceMaker.Keys)
-        //{
-        //    if (_isCanChanceBeChanged[entity]) { changeableCount--; continue; }
+    //    //    IsCanChanceBeChanged.Add(entity, false);
+    //    //}
 
-        //    totalChance += _chanceMaker[entity];
-        //}
+    //    //float totalChance = 0f;
+    //    //int changeableCount = ChanceMaker.Count;
 
-        //foreach (var item in _chanceMaker.Keys)
-        //{
-        //    if (_isCanChanceBeChanged[item]) continue;
+    //    //foreach (var entity in ChanceMaker.Keys)
+    //    //{
+    //    //    if (IsCanChanceBeChanged[entity]) { changeableCount--; continue; }
 
-        //    _chanceMaker[item] = totalChance / changeableCount;
-        //}
-    }
+    //    //    totalChance += ChanceMaker[entity];
+    //    //}
+
+    //    //foreach (var item in ChanceMaker.Keys)
+    //    //{
+    //    //    if (IsCanChanceBeChanged[item]) continue;
+
+    //    //    ChanceMaker[item] = totalChance / changeableCount;
+    //    //}
+    //}
 }

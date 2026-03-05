@@ -7,13 +7,13 @@ public class GambleManager
         float random = Random.value;
         float totalChance = 0;
 
-        foreach (var itemData in item._chanceMaker.Keys)
+        foreach (var itemData in item.ChanceMaker.Keys)
         {
-            totalChance += item._chanceMaker[itemData];
+            totalChance += item.ChanceMaker[itemData];
             if (random <  totalChance)
                 return itemData;
             else
-                totalChance += item._chanceMaker[itemData];
+                totalChance += item.ChanceMaker[itemData];
         }
 
         return null;

@@ -42,11 +42,12 @@ public class GameManager : MonoBehaviour
         if (_gameUI == null) { Debug.LogWarning("Gde GUI"); return; }
         _gameUI.Init();
         _gameUI.InitInventoryCanvas(_itemsDatas);
+        _gameUI.InitCraftContainer(_itemsDatas);
     }
 
     private void Start()
     {
-        StartGame();
+        //StartGame();
     }
 
     private void OnDestroy()
