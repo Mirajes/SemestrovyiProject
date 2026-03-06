@@ -13,9 +13,14 @@ public class Entity : MonoBehaviour
 
     public void Init(EntityData data) { _data = data; }
 
+    public void Death()
+    {
+
+    }
+
     private void OnDestroy()
     {
-        
+        // animation only
     }
 
 

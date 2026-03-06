@@ -10,21 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6abd891087d9cc46b0646c9638f0346, type: 3}
-  m_Name: Nothing
+  m_Name: Fur
   m_EditorClassIdentifier: 
-  _name: empty
+  _name: Fur
   _description: 
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: d6ce87e82c83e0d4a9ec7aaec126260e, type: 3}
   _count: 0
   _isCanBeCrafted: 0
   ChanceMaker:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: 54de776f56390084f8a159186219af02, type: 2}
-      Value: 0.1
-    - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
-      Value: 0.1
-    - Key: {fileID: 0}
-      Value: 0.8
+    _serializedList: []
   IsCanChanceBeChanged:
     _serializedList: []
   ItemReceipt:

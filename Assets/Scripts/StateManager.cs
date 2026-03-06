@@ -1,3 +1,5 @@
+// рудимент
+
 public class StateManager
 {
     private string _state;

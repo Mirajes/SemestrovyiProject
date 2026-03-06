@@ -4,6 +4,8 @@ public class GambleManager
 {
     public EntityData RollEntity(ItemData item)
     {
+        if (item.ChanceMaker.Count <= 0) { Debug.Log($"Ничего нет в {item}"); return null; }
+
         float random = Random.value;
         float totalChance = 0;
 

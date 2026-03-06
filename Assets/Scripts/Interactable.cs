@@ -3,19 +3,23 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Interactable : MonoBehaviour
 {
-    [SerializeField] private MenuAction _actionContext;
+    [SerializeField] private Statement _actionContext;
 
     public void Invoke()
     {
         switch (_actionContext)
         {
-            case MenuAction.Run:
+            case Statement.Cycle:
+                GameManager.StateChange?.Invoke(_actionContext);
                 break;
-            case MenuAction.Home:
+            case Statement.Home:
+                GameManager.StateChange?.Invoke(_actionContext);
                 break;
-            case MenuAction.Minds:
+            case Statement.Minds:
+
                 break;
-            case MenuAction.Menu:
+            case Statement.Menu:
+                GameManager.StateChange?.Invoke(_actionContext);
                 break;
         }
     }

@@ -10,24 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6abd891087d9cc46b0646c9638f0346, type: 3}
-  m_Name: Instrument
+  m_Name: CatTail
   m_EditorClassIdentifier: 
-  _name: someInstrument
+  _name: Cat Tail
   _description: 
-  _sprite: {fileID: 21300000, guid: c6f723a8cfae7874e945d486cb1569ed, type: 3}
-  _count: 1
+  _sprite: {fileID: 21300000, guid: 7220d1d34e19ee94c92413f6a3f3d73d, type: 3}
+  _count: 0
   _isCanBeCrafted: 1
   ChanceMaker:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: 54de776f56390084f8a159186219af02, type: 2}
-      Value: 0.4
-    - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
-      Value: 0.6
+    _serializedList: []
   IsCanChanceBeChanged:
     _serializedList: []
   ItemReceipt:
     _serializedList:
     - Key: {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
-      Value: 2
-    - Key: {fileID: 11400000, guid: 5c186f79762a08d4eb2c2cde06a1c8d8, type: 2}
+      Value: 5
+    - Key: {fileID: 11400000, guid: 4db146164dd2c9847a68526410a0199f, type: 2}
       Value: 3

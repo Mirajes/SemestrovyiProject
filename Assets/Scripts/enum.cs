@@ -1,6 +1,6 @@
-public enum MenuAction
+public enum Statement
 {
-    Run,
+    Cycle,
     Home,
     Minds,
     Menu

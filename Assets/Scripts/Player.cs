@@ -6,27 +6,24 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer _head;
     private void OnMouseDown()
     {
-        print("on me");
         
         _contextMenu.SetActive(true);
     }
 
     private void OnMouseUp()
     {
-        print("stopped");
 
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(CursorManager.CursorPos);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
         if (hit.collider != null)
         {
-            hit.collider.TryGetComponent<Interactable>(out Interactable button);
+            hit.collider.TryGetComponent<Interactable>(out Interactable actionButton);
 
-            if (button != null)
+            if (actionButton != null)
             {
-                button.Invoke();
+                actionButton.Invoke();
 
-                print("mouse");
             }
         }
         _contextMenu.SetActive(false);
@@ -34,7 +31,7 @@ public class Player : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        print("dug");
+
     }
 }
 

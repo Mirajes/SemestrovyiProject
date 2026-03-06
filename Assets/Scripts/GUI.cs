@@ -12,6 +12,7 @@ public class GUI : MonoBehaviour
     [SerializeField] private CanvasGroup _inventoryCanvas;
     [SerializeField] private Transform _invContainer;
     [SerializeField] private Image _invSlotPrefab;
+    [SerializeField] private Button _closeButton;
 
     [Header("Craft")]
     [SerializeField] private RectTransform _craftContainer;

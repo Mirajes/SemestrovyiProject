@@ -11,15 +11,28 @@ public class GameManager : MonoBehaviour
     [Header("Main")]
     private InputSystem_Actions _inputMap;
     private CursorManager _cursorManager;
-    private StateManager _stateManager = new();
+    //private StateManager _stateManager = new();
     private GambleManager _gambleManager = new();
-    private CancellationTokenSource _cts = new();
+    private CancellationTokenSource _cts;
+    private Camera _mainCamera;
+
+    [Header("Player")]
+    [SerializeField] private Player _player;
+    private Statement _state;
+    public static Action<Statement> StateChange;
 
     [Header("UI")]
     [SerializeField] private GUI _gameUI;
 
-    [Header("Support")]
+    [Header("Poses")]
+    [SerializeField] private Transform _playerHomePos;
+    [SerializeField] private Transform _playerCyclePos;
     [SerializeField] private Transform _entitySpawnPos;
+    [SerializeField] private Vector3 _cameraHomePos;
+    [SerializeField] private Vector3 _cameraCyclePos;
+
+    [Header("Entity")]
+    private Entity _currentEntity;
 
     [Header("Inventory")]
     private List<ItemData> _itemsDatas;
@@ -47,19 +60,26 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //StartGame();
+        _mainCamera = Camera.main;
+
+        StartGame();
+    }
+
+    private void OnEnable()
+    {
+        StateChange += OnStateChange;
+    }
+
+    private void OnDisable()
+    {
+        StateChange -= OnStateChange; 
     }
 
     private void OnDestroy()
     {
         // stop input and cancel any running async loops
         RemoveControlls();
-        if (_cts != null)
-        {
-            _cts.Cancel();
-            _cts.Dispose();
-            _cts = null;
-        }
+        DeleteCTS();
     }
 
     #region Controlls
@@ -86,26 +106,70 @@ public class GameManager : MonoBehaviour
         ItemData someItem = Resources.Load<ItemData>("Items/Instrument");
         _cycleOrder.Add(someItem);
 
-        _stateManager.ChangeState("Cycle");
+        _state = Statement.Cycle;
 
-        switch (_stateManager.State)
+        OnStateChange(_state);
+    }
+
+    private void OnStateChange(Statement newState)
+    {
+        print(newState);
+        switch (newState)
         {
-            case "Cycle":
+            case Statement.Cycle:
+                DeleteCTS();
+
+                _cts = new();
                 CycleTick(_cts.Token).Forget();
+                MoveToCycle();
                 break;
-            case "Home":
+            case Statement.Home:
+                DeleteCTS();
+                MoveToHome();
                 break;
             default:
                 Debug.Log("where");
-                break; 
+                break;
         }
     }
 
+    private void MoveToCycle()
+    {
+        _player.transform.position = _playerCyclePos.transform.position;
+        _mainCamera.transform.position = _cameraCyclePos;
+    }
+
+    private void MoveToHome()
+    {
+        _player.transform.position = _playerHomePos.transform.position;
+        _mainCamera.transform.position = _cameraHomePos;
+    }
+
+    private void DeleteCTS()
+    {
+        if (_cts != null)
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = null;
+        }
+    }
+
+    private async UniTask OnCycleCancel(CancellationToken token)
+    {
+        await UniTask.WaitUntilCanceled(token);
+        if (_currentEntity != null)
+            Destroy(_currentEntity.gameObject);
+    }
+
     // copilot помог
+    // TODO: может возникнуть проблема когда у предмета в цикле слетели Entity и Unity зависает наху
     private async UniTask CycleTick(CancellationToken token)
     {
         try
         {
+            OnCycleCancel(token).Forget();
+
             // keep running until cancelled
             while (true)
             {
@@ -116,13 +180,16 @@ public class GameManager : MonoBehaviour
 
                     EntityData entity = _gambleManager.RollEntity(item);
                     if (entity == null || entity.EntityPrefab == null)
-                        { Debug.Log("no entity or prefab"); continue; }
+                        { Debug.Log("no entity or prefab"); await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken: token); continue; }
 
-                    Entity spawned = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
+                    //await UniTask.Delay(TimeSpan.FromSeconds(1)); // delay TODO
+
+                    if (_currentEntity != null) Destroy(_currentEntity.gameObject);
+                    _currentEntity = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
 
                     // wait until the spawned object is destroyed OR the token is cancelled
                     // UnityEngine.Object == null works for destroyed objects
-                    await UniTask.WaitWhile(() => spawned != null, cancellationToken: token);
+                    await UniTask.WaitWhile(() => _currentEntity != null, cancellationToken: token);
                 }
                 // when finished all items, the outer while(true) will restart the foreach
             }
