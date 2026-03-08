@@ -8,7 +8,7 @@ public class EntityData : ScriptableObject
     [SerializeField] private string _description;
     [SerializeField] private Sprite _sprite;
 
-    [SerializeField] private List<ItemData> _dropResource;
+    [SerializeField] private List<ItemData> _dropResource; // поменять на Dictionary<ItemData, int> для указания количества ресурсов в дропе
 
     [SerializeField] private Entity _entityPrefab;
     [SerializeField] private EntityData _reversedEntity;

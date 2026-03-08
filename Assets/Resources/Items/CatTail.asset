@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: Cat Tail
   _description: 
   _sprite: {fileID: 21300000, guid: 7220d1d34e19ee94c92413f6a3f3d73d, type: 3}
-  _count: 0
+  _count: 3
   _isCanBeCrafted: 1
   ChanceMaker:
     _serializedList: []

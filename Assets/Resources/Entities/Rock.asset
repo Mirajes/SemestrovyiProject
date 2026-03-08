@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c323224053e494dbce1cd49b114773, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
-  _name: 
+  _name: Rock
   _description: 
   _sprite: {fileID: 0}
-  _dropResource: []
+  _dropResource:
+  - {fileID: 11400000, guid: 5c186f79762a08d4eb2c2cde06a1c8d8, type: 2}
+  - {fileID: 11400000, guid: 5c186f79762a08d4eb2c2cde06a1c8d8, type: 2}
   _entityPrefab: {fileID: -2282164173208494348, guid: 682b56bf34a184849bb4057ef446528b, type: 3}
   _reversedEntity: {fileID: 11400000}

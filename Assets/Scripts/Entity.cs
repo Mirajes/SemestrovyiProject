@@ -4,11 +4,13 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     public EntityData Data => _data;
+    public float CurrentHealth => _currentHealth;
+    public float MaxHealth => _maxHealth;
 
     private EntityData _data;
     private float _passedDistance = 0f; // рудимент
     [SerializeField] private float _maxHealth = 10f;
-    [SerializeField] private float _health = 3f;
+    [SerializeField] private float _currentHealth = 3f;
     
     [Header("Cursor Hit Settings")]
     [SerializeField] private float _minPassDistance = 0.02f; // in viewport units (0..1)
@@ -28,17 +30,21 @@ public class Entity : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // start of a new click/hold — reset per-hold tracking so debounce from previous hold
+        // doesn't block this new attempt
+        _hitDebounce = false;
+        _maxSpeedDuringPass = 0f;
+
         print("show info");
     }
 
     private void OnMouseUp()
     {
-        if (CursorManager.IsAttacking)
-        {
-            // reset per-hold tracking
-            _hitDebounce = false;
-            _maxSpeedDuringPass = 0f;
-        }
+        // Always reset per-hold tracking on mouse release so debounce does not
+        // remain true if attacking state changed while the cursor was held.
+        _hitDebounce = false;
+        _maxSpeedDuringPass = 0f;
+
         print("stopped");
     }
 
@@ -82,7 +88,7 @@ public class Entity : MonoBehaviour
 
         print("ouch");
     }
-    public void Init(EntityData data) { _data = data; }
+    public void Init(EntityData data) { _data = data; EntityProgressBar.UpdateAmount(_maxHealth, _currentHealth); }
 
     public void Death()
     {
@@ -92,10 +98,10 @@ public class Entity : MonoBehaviour
 
     private void TakeDamage(float amount)
     {
-        _health -= amount;
-        ProgressBar.UpdateAmount(_maxHealth, _health);
+        _currentHealth -= amount;
+        EntityProgressBar.UpdateAmount(_maxHealth, _currentHealth);
 
-        if (_health <= 0)
+        if (_currentHealth <= 0)
             Death();
     }
 

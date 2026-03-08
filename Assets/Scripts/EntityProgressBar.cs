@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ProgressBar : MonoBehaviour
+public class EntityProgressBar : MonoBehaviour
 {
     private static GameObject _progressBar;
 

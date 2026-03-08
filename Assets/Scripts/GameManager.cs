@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private GambleManager _gambleManager = new();
     private CancellationTokenSource _cts;
     private Camera _mainCamera;
+    [SerializeField] private EntityProgressBar _progressBar;
 
     [Header("Player")]
     [SerializeField] private Player _player;
@@ -53,6 +54,8 @@ public class GameManager : MonoBehaviour
         InitControlls();
 
         _itemsDatas = Resources.LoadAll<ItemData>("Items").ToList();
+
+        _progressBar.Init();
 
         if (_gameUI == null) { Debug.LogWarning("Gde GUI"); return; }
         _gameUI.Init();
@@ -193,6 +196,7 @@ public class GameManager : MonoBehaviour
 
                     if (_currentEntity != null) Destroy(_currentEntity.gameObject);
                     _currentEntity = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
+                    _currentEntity.Init(entity);
 
                     // wait until the spawned object is destroyed OR the token is cancelled
                     // UnityEngine.Object == null works for destroyed objects
@@ -212,7 +216,11 @@ public class GameManager : MonoBehaviour
     {
         foreach (var item in entityData.DropResource)
         {
-
+            ItemData inventoryItem = _itemsDatas.Find(x => item);
+            if (inventoryItem != null)
+            {
+                inventoryItem.AddItem(1);
+            }
         }
     }
 }
