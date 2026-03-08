@@ -718,7 +718,7 @@ GameObject:
   - component: {fileID: 8514562435927309858}
   - component: {fileID: 6794029376693790583}
   - component: {fileID: 9159213721895912565}
-  - component: {fileID: 3228546981892922862}
+  - component: {fileID: 284087380024168236}
   m_Layer: 5
   m_Name: CraftPanel
   m_TagString: Untagged
@@ -788,7 +788,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3228546981892922862
+--- !u!114 &284087380024168236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9050008877185986401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 316f57423f720184cbf59bc0c03309a3, type: 3}
+  m_Script: {fileID: 11500000, guid: a9754f37efe7689458749b14f2335a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemData: {fileID: 0}

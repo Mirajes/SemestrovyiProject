@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public static Action<Statement> StateChange;
 
     [Header("UI")]
+    public static bool IsInUI = false;
     [SerializeField] private GUI _gameUI;
 
     [Header("Poses")]
@@ -33,9 +34,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Entity")]
     private Entity _currentEntity;
+    public static Action<EntityData> EntityDeath;
 
     [Header("Inventory")]
-    private List<ItemData> _itemsDatas;
+    private List<ItemData> _itemsDatas; // Все предметы в списке
     private List<ItemData> _inventoryMain = new();
 
     private List<ItemData> _cycleOrder = new();
@@ -68,11 +70,13 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         StateChange += OnStateChange;
+        EntityDeath += OnEntityDeath;
     }
 
     private void OnDisable()
     {
-        StateChange -= OnStateChange; 
+        StateChange -= OnStateChange;
+        EntityDeath -= OnEntityDeath;
     }
 
     private void OnDestroy()
@@ -89,8 +93,8 @@ public class GameManager : MonoBehaviour
 
         _inputMap.Player.Cursor.performed += _cursorManager.KnowMousePos;
 
-        _inputMap.Player.Attack.started += _cursorManager.OnAttackInput;
-        _inputMap.Player.Attack.canceled += _cursorManager.OnAttackInput;
+        _inputMap.Player.Attack.started += _cursorManager.OnHoldInput;
+        _inputMap.Player.Attack.canceled += _cursorManager.OnHoldInput;
 
         _inputMap.Enable();
     }
@@ -126,6 +130,9 @@ public class GameManager : MonoBehaviour
             case Statement.Home:
                 DeleteCTS();
                 MoveToHome();
+                break;
+            case Statement.Menu:
+                _gameUI.ShowInventory();
                 break;
             default:
                 Debug.Log("where");
@@ -198,6 +205,14 @@ public class GameManager : MonoBehaviour
         {
             // cancellation requested - exit gracefully
             //Debug.LogError("смотри проблема 0_0");
+        }
+    }
+
+    private void OnEntityDeath(EntityData entityData)
+    {
+        foreach (var item in entityData.DropResource)
+        {
+
         }
     }
 }

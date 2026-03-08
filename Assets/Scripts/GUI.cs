@@ -10,13 +10,14 @@ public class GUI : MonoBehaviour
 
     [Header("Inventory")]
     [SerializeField] private CanvasGroup _inventoryCanvas;
+    [SerializeField] private Transform _inventoryMainEmpty;
     [SerializeField] private Transform _invContainer;
-    [SerializeField] private Image _invSlotPrefab;
+    [SerializeField] private SlotLogic _invSlotPrefab;
     [SerializeField] private Button _closeButton;
 
     [Header("Craft")]
     [SerializeField] private RectTransform _craftContainer;
-    [SerializeField] private CraftPanelLogic _craftPanelPrefab;
+    [SerializeField] private CraftSlotLogic _craftPanelPrefab;
 
     #region Main
     public void Init()
@@ -30,9 +31,10 @@ public class GUI : MonoBehaviour
     {
         foreach(ItemData item in itemDatas)
         {
-            Image newSlot = Instantiate(_invSlotPrefab, _invContainer);
+            SlotLogic newSlot = Instantiate(_invSlotPrefab, _invContainer);
             newSlot.name = item.Name;
-            newSlot.sprite = item.Sprite;
+            newSlot.Init(item);
+            newSlot.UpdateSlot();
         }
     }
 
@@ -41,6 +43,17 @@ public class GUI : MonoBehaviour
         
     }
     #endregion
+
+    public void ShowInventory()
+    {
+        for (int i = 0; i < _invContainer.transform.childCount; i++)
+        {
+            SlotLogic slot = _invContainer.transform.GetChild(i).GetComponent<SlotLogic>();
+            slot.UpdateSlot();
+        }
+
+        _inventoryMainEmpty.gameObject.SetActive(true);
+    }
 
     #region CraftWindow
     public void InitCraftContainer(List<ItemData> itemDatas)
@@ -53,7 +66,7 @@ public class GUI : MonoBehaviour
             if (!item.IsCanBeCrafted) continue; // низя делать
 
             craftingItemCount++;
-            CraftPanelLogic newCraftPanel = Instantiate<CraftPanelLogic>(_craftPanelPrefab, _craftContainer);
+            CraftSlotLogic newCraftPanel = Instantiate<CraftSlotLogic>(_craftPanelPrefab, _craftContainer);
             newCraftPanel.name = item.Name;
             newCraftPanel.Init(item);
             newCraftPanel.gameObject.SetActive(true);

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftPanelLogic : MonoBehaviour
+public class CraftSlotLogic : MonoBehaviour
 {
     [SerializeField] private ItemData _itemData;
 
@@ -21,6 +21,9 @@ public class CraftPanelLogic : MonoBehaviour
         _craftItemName.text = itemData.Name;
         _craftItemSprite.sprite = itemData.Sprite;
         _craftItemCount.text = "Owned: " + itemData.Count.ToString();
+
+        _craftButton.onClick.RemoveAllListeners();
+        _craftButton.onClick.AddListener(() => Debug.Log($"delaem {_itemData.Name}"));
 
         InitReceipt();
     }
