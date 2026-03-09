@@ -3,14 +3,17 @@ using UnityEngine.InputSystem;
 
 public class CursorManager : MonoBehaviour // для Raycast
 {
+    [Header("Public")]
     public static Vector2 CursorPos => _cursorPos;
     public static bool IsAttacking => _isHolding;
     public static float CursorSpeed => _cursorSpeed;
     public static float CursorDamage => _cursorDamage;
 
+    [Header("Main")]
     private static Vector2 _cursorPos;
     private static bool _isHolding = false;
     private static float _cursorSpeed = 0f;
+    
     [SerializeField] private float _inspectorCursorDamage = 5f;
     private static float _cursorDamage = 5f;
 

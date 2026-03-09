@@ -23,7 +23,7 @@ public class CraftSlotLogic : MonoBehaviour
         _craftItemCount.text = "Owned: " + itemData.Count.ToString();
 
         _craftButton.onClick.RemoveAllListeners();
-        _craftButton.onClick.AddListener(() => Debug.Log($"delaem {_itemData.Name}"));
+        _craftButton.onClick.AddListener(() => Debug.Log($"delaem {_itemData.Name}")); // todo
 
         InitReceipt();
     }

@@ -16,8 +16,8 @@ MonoBehaviour:
   _description: 
   _sprite: {fileID: 0}
   _dropResource:
-  - {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
-  - {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
-  - {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
+    _serializedList:
+    - Key: {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
+      Value: 3
   _entityPrefab: {fileID: 3152341254225542874, guid: ea3704ac2994c444e99eb67c2ce3d78b, type: 3}
   _reversedEntity: {fileID: 11400000}

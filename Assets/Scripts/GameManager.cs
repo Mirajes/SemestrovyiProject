@@ -5,154 +5,129 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
-[RequireComponent(typeof(CursorManager))]
+
+[RequireComponent(typeof(CursorManager), typeof(CycleManager), typeof(HomeManager))]
+[RequireComponent(typeof(CameraController), typeof(GameUI))]
 public class GameManager : MonoBehaviour
 {
-    [Header("Main")]
+    public static GameManager Instance;
+
+    public bool IsInUI => _isInUI;
+    public bool IsPaused => _isPaused;
+    public Player Player => _player;
+    public GambleMachine Gamble => _gamble;
+    public CameraController CameraController => _cameraController;
+    
+
+    [Header("Core")]
     private InputSystem_Actions _inputMap;
-    private CursorManager _cursorManager;
-    //private StateManager _stateManager = new();
-    private GambleManager _gambleManager = new();
-    private CancellationTokenSource _cts;
-    private Camera _mainCamera;
-    [SerializeField] private EntityProgressBar _progressBar;
 
-    [Header("Player")]
+    private CancellationTokenSource _cts = new();
+    private GambleMachine _gamble = new();
+
     [SerializeField] private Player _player;
-    private Statement _state;
+    [SerializeField] private GameUI _gameUI;
+    [SerializeField] private CursorManager _cursor;
+    [SerializeField] private CycleManager _cycleManager;
+    [SerializeField] private HomeManager _homeManager;
+    [SerializeField] private CameraController _cameraController;
+
+    [Header("Statement")]
+    [SerializeField] private bool _isInUI;
+    [SerializeField] private bool _isPaused;
+    [SerializeField] private Statement _statement;
+
+    [Header("Event")]
     public static Action<Statement> StateChange;
-
-    [Header("UI")]
-    public static bool IsInUI = false;
-    [SerializeField] private GUI _gameUI;
-
-    [Header("Poses")]
-    [SerializeField] private Transform _playerHomePos;
-    [SerializeField] private Transform _playerCyclePos;
-    [SerializeField] private Transform _entitySpawnPos;
-    [SerializeField] private Vector3 _cameraHomePos;
-    [SerializeField] private Vector3 _cameraCyclePos;
-
-    [Header("Entity")]
-    private Entity _currentEntity;
     public static Action<EntityData> EntityDeath;
 
-    [Header("Inventory")]
-    private List<ItemData> _itemsDatas; // Все предметы в списке
-    private List<ItemData> _inventoryMain = new();
+    [Header("Data")]
+    private List<ItemData> _itemDatas;
 
-    private List<ItemData> _cycleOrder = new();
-    private int _maxCycleOrderCapacity = 3;
-
-    private List<ItemData> _fightOrder = new();
-    private int _maxFightOrder = 3;
+    [Header("Test")]
+    private EntityData _testTree;
+    private EntityData _testRock;
 
     private void Awake()
     {
-        _cursorManager = GetComponent<CursorManager>();
-
-        InitControlls();
-
-        _itemsDatas = Resources.LoadAll<ItemData>("Items").ToList();
-
-        _progressBar.Init();
-
-        if (_gameUI == null) { Debug.LogWarning("Gde GUI"); return; }
-        _gameUI.Init();
-        _gameUI.InitInventoryCanvas(_itemsDatas);
-        _gameUI.InitCraftContainer(_itemsDatas);
+        if (Instance  == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
     }
 
     private void Start()
     {
-        _mainCamera = Camera.main;
+        if (_player == null || _gameUI == null || _cursor == null) { Debug.LogWarning("check links"); return; }
 
-        StartGame();
+        _itemDatas = Resources.LoadAll<ItemData>("Items").ToList();
+
+        _cameraController.Init();
+
+        _gameUI.Init(_itemDatas);
+        _gameUI.ProgressBar.Init();
+
+        InitInputs();
+
+        #region Test
+        _testTree = Resources.Load<EntityData>("Entities/Tree");
+        _testRock = Resources.Load<EntityData>("Entities/Rock");
+        Test();
+        #endregion
     }
 
     private void OnEnable()
     {
+        EntityDeath += _cycleManager.OnEntityDeath;
         StateChange += OnStateChange;
-        EntityDeath += OnEntityDeath;
     }
 
     private void OnDisable()
     {
+        EntityDeath -= _cycleManager.OnEntityDeath;
         StateChange -= OnStateChange;
-        EntityDeath -= OnEntityDeath;
     }
 
     private void OnDestroy()
     {
-        // stop input and cancel any running async loops
-        RemoveControlls();
+        _inputMap.Disable();
+        _inputMap.Dispose();
+
         DeleteCTS();
     }
 
-    #region Controlls
-    private void InitControlls()
+    #region Test
+    private void Test()
     {
-        _inputMap = new();
+        EntityDeath.Invoke(_testTree);
+        EntityDeath.Invoke(_testTree);
+        EntityDeath.Invoke(_testRock);
 
-        _inputMap.Player.Cursor.performed += _cursorManager.KnowMousePos;
-
-        _inputMap.Player.Attack.started += _cursorManager.OnHoldInput;
-        _inputMap.Player.Attack.canceled += _cursorManager.OnHoldInput;
-
-        _inputMap.Enable();
+        StartGame();
     }
-    private void RemoveControlls()
+    private void StartGame()
     {
-        _inputMap.Disable();
-        _inputMap.Dispose();
+        _statement = Statement.Cycle;
+
+        OnStateChange(_statement);
     }
     #endregion
 
-    private void StartGame()
+    private void InitInputs() // todo: в отдельный наверно
     {
-        ItemData someItem = Resources.Load<ItemData>("Items/Instrument");
-        _cycleOrder.Add(someItem);
+        _inputMap = new();
 
-        _state = Statement.Cycle;
+        _inputMap.Player.CursorPosition.performed += _cursor.KnowMousePos;
+        _inputMap.Player.Hold.started += _cursor.OnHoldInput;
+        _inputMap.Player.Hold.canceled += _cursor.OnHoldInput;
 
-        OnStateChange(_state);
-    }
-
-    private void OnStateChange(Statement newState)
-    {
-        print(newState);
-        switch (newState)
-        {
-            case Statement.Cycle:
-                DeleteCTS();
-
-                _cts = new();
-                CycleTick(_cts.Token).Forget();
-                MoveToCycle();
-                break;
-            case Statement.Home:
-                DeleteCTS();
-                MoveToHome();
-                break;
-            case Statement.Menu:
-                _gameUI.ShowInventory();
-                break;
-            default:
-                Debug.Log("where");
-                break;
-        }
-    }
-
-    private void MoveToCycle()
-    {
-        _player.transform.position = _playerCyclePos.transform.position;
-        _mainCamera.transform.position = _cameraCyclePos;
-    }
-
-    private void MoveToHome()
-    {
-        _player.transform.position = _playerHomePos.transform.position;
-        _mainCamera.transform.position = _cameraHomePos;
+        _inputMap.Enable();
     }
 
     private void DeleteCTS()
@@ -165,62 +140,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private async UniTask OnCycleCancel(CancellationToken token)
+    private void OnStateChange(Statement newState)
     {
-        await UniTask.WaitUntilCanceled(token);
-        if (_currentEntity != null)
-            Destroy(_currentEntity.gameObject);
-    }
-
-    // copilot помог
-    // TODO: может возникнуть проблема когда у предмета в цикле слетели Entity и Unity зависает наху
-    private async UniTask CycleTick(CancellationToken token)
-    {
-        try
+        print(newState);
+        switch (newState)
         {
-            OnCycleCancel(token).Forget();
+            case Statement.Cycle:
+                DeleteCTS();
 
-            // keep running until cancelled
-            while (true)
-            {
-                // iterate over a snapshot so the collection can be modified elsewhere
-                foreach (ItemData item in _cycleOrder.ToArray())
-                {
-                    token.ThrowIfCancellationRequested();
-
-                    EntityData entity = _gambleManager.RollEntity(item);
-                    if (entity == null || entity.EntityPrefab == null)
-                        { Debug.Log("no entity or prefab"); await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken: token); continue; }
-
-                    //await UniTask.Delay(TimeSpan.FromSeconds(1)); // delay TODO
-
-                    if (_currentEntity != null) Destroy(_currentEntity.gameObject);
-                    _currentEntity = Instantiate(entity.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
-                    _currentEntity.Init(entity);
-
-                    // wait until the spawned object is destroyed OR the token is cancelled
-                    // UnityEngine.Object == null works for destroyed objects
-                    await UniTask.WaitWhile(() => _currentEntity != null, cancellationToken: token);
-                }
-                // when finished all items, the outer while(true) will restart the foreach
-            }
-    }
-        catch (OperationCanceledException)
-        {
-            // cancellation requested - exit gracefully
-            //Debug.LogError("смотри проблема 0_0");
-        }
-    }
-
-    private void OnEntityDeath(EntityData entityData)
-    {
-        foreach (var item in entityData.DropResource)
-        {
-            ItemData inventoryItem = _itemsDatas.Find(x => item);
-            if (inventoryItem != null)
-            {
-                inventoryItem.AddItem(1);
-            }
+                _cts = new();
+                _cycleManager.CycleTick(_cts.Token).Forget();
+                _cycleManager.MoveToCycle();
+                break;
+            case Statement.Home:
+                DeleteCTS();
+                _homeManager.MoveToHome();
+                break;
+            case Statement.Menu:
+                _gameUI.ShowInventory();
+                break;
+            default:
+                Debug.Log("where");
+                break;
         }
     }
 }
+
+
+
+
+
+

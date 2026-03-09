@@ -2,14 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUI : MonoBehaviour
+public class GameUI : MonoBehaviour
 {
+    public EntityProgressBar ProgressBar => _progressBar;
+
     [Header("Main")]
     [SerializeField] private CanvasGroup _interfaceCanvas;
-    [SerializeField] private Texture2D _cursorSprite;
+    [SerializeField] private CanvasGroup _inventoryCanvas;
+    [SerializeField] private EntityProgressBar _progressBar;
 
     [Header("Inventory")]
-    [SerializeField] private CanvasGroup _inventoryCanvas;
     [SerializeField] private Transform _inventoryMainEmpty;
     [SerializeField] private Transform _invContainer;
     [SerializeField] private SlotLogic _invSlotPrefab;
@@ -19,10 +21,15 @@ public class GUI : MonoBehaviour
     [SerializeField] private RectTransform _craftContainer;
     [SerializeField] private CraftSlotLogic _craftPanelPrefab;
 
+    [Header("kuda")]
+    [SerializeField] private Texture2D _cursorSprite;
+
     #region Main
-    public void Init()
+    public void Init(List<ItemData> itemDatas)
     {
         //Cursor.SetCursor(_cursorSprite, Vector2.zero, CursorMode.ForceSoftware);
+        InitInventoryCanvas(itemDatas);
+        InitCraftContainer(itemDatas);
     }
     #endregion
 

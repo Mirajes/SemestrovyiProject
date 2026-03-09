@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GambleManager
+public class GambleMachine
 {
     public EntityData RollEntity(ItemData item)
     {

@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ public class EntityData : ScriptableObject
     [SerializeField] private string _description;
     [SerializeField] private Sprite _sprite;
 
-    [SerializeField] private List<ItemData> _dropResource; // поменять на Dictionary<ItemData, int> для указания количества ресурсов в дропе
+    [SerializedDictionary("Item to drop", "Count")]
+    [SerializeField] private SerializedDictionary<ItemData, int> _dropResource;
 
     [SerializeField] private Entity _entityPrefab;
     [SerializeField] private EntityData _reversedEntity;
@@ -26,7 +28,7 @@ public class EntityData : ScriptableObject
     public string Name => _name;
     public string Description => _description;
     public Sprite Sprite => _sprite;
-    public List<ItemData> DropResource => _dropResource;
+    public Dictionary<ItemData, int> DropResource => _dropResource;
     public Entity EntityPrefab => _entityPrefab;
     public EntityData ReversedEntity => _reversedEntity;
 }
