@@ -718,6 +718,7 @@ GameObject:
   - component: {fileID: 8514562435927309858}
   - component: {fileID: 6794029376693790583}
   - component: {fileID: 9159213721895912565}
+  - component: {fileID: 284087380024168236}
   m_Layer: 5
   m_Name: CraftPanel
   m_TagString: Untagged
@@ -787,3 +788,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &284087380024168236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9050008877185986401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9754f37efe7689458749b14f2335a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemData: {fileID: 0}
+  _craftItemName: {fileID: 30855301235765411}
+  _craftItemSprite: {fileID: 979940497053781680}
+  _craftItemCount: {fileID: 3776906260051030960}
+  _craftButton: {fileID: 7015826033373280654}
+  _receiptContainer: {fileID: 638866341268456942}
+  _receiptSlotPanelPrefab: {fileID: 6133342229128284192, guid: 728750f6dcb0c3645a5985bfc8896d4b, type: 3}
