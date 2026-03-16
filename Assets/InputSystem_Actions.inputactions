@@ -16,7 +16,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Hold",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "f773d713-678c-4e38-9180-6789ef965c44",
                     "expectedControlType": "",
@@ -44,7 +44,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Hold",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

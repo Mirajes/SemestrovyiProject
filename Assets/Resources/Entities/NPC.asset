@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42c323224053e494dbce1cd49b114773, type: 3}
-  m_Name: Tree
+  m_Name: NPC
   m_EditorClassIdentifier: 
-  _name: Tree
+  _name: pozor
   _description: 
-  _entityPrefab: {fileID: 8245076405599003891, guid: ea3704ac2994c444e99eb67c2ce3d78b, type: 3}
-  _isNPC: 0
+  _baseHP: 1
+  _entityPrefab: {fileID: 5344097398440828614, guid: 914a8e67c5c07464fadcd3e09a03c4eb, type: 3}
+  _isNPC: 1
   _drop:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: aa0f8872e8a318640b8c2bbff7e8fc67, type: 2}
-      Value: 3
+    _serializedList: []

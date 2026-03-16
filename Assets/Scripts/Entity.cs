@@ -1,11 +1,35 @@
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public abstract class Entity : MonoBehaviour
 {
-    private EntityData _entityData;
+    [SerializeField] protected EntityData _entityData;
+    [SerializeField] protected float _maxHealth;
+    [SerializeField] protected float _currentHealth;
 
-    public void Init(EntityData data)
+    public virtual void Init(EntityData data)
     {
         _entityData = data;
-    } 
+        _maxHealth = data.BaseHP;
+        _currentHealth = _maxHealth;
+
+        if (_entityData.IsNPC)
+        {
+            Debug.Log("this is NPC");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // anim
+    }
+
+    private void OnMouseEnter()
+    {
+        
+    }
+
+    private void OnMouseExit()
+    {
+
+    }
 }

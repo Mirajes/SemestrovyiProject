@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Rock
   _description: 
-  _sprite: {fileID: 0}
-  _dropResource:
+  _entityPrefab: {fileID: 2591277297231879006, guid: 682b56bf34a184849bb4057ef446528b, type: 3}
+  _isNPC: 0
+  _drop:
     _serializedList:
     - Key: {fileID: 11400000, guid: 5c186f79762a08d4eb2c2cde06a1c8d8, type: 2}
       Value: 2
-  _entityPrefab: {fileID: -2282164173208494348, guid: 682b56bf34a184849bb4057ef446528b, type: 3}
-  _reversedEntity: {fileID: 11400000}
