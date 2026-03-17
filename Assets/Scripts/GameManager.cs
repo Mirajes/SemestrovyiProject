@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
     }
 
     private void OnEnable()
@@ -34,20 +35,26 @@ public class GameManager : MonoBehaviour
 
         ChangeState += OnStateChanged;
         ReturnFromCycle += OnReturnFromCycle;
-
-        //#region Test
-        //GameManager.ChangeState?.Invoke(GameContext.Instance.State);
-        //#endregion
+        #region Test
+        GameManager.ChangeState?.Invoke(GameContext.Instance.State);
+        #endregion
     }
 
     private void OnDisable()
     {
+        Debug.Log($"{GameContext.Instance}");
+
         _inputMap.Player.Attack.started -= GameContext.Instance.CursorManager.OnAttackInput;
         _inputMap.Player.Attack.canceled -= GameContext.Instance.CursorManager.OnAttackInput;
         _inputMap.Dispose();
 
         ChangeState -= OnStateChanged;
         ReturnFromCycle -= OnReturnFromCycle;
+    }
+
+    private void OnDestroy()
+    {
+
     }
 
     private void OnReturnFromCycle(Entity entity)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameContext : Singleton<GameContext>
+public class GameContext : A_Singleton<GameContext>
 {
     public Player Player => _player;
     public GameManager GameManager => _gameManager;
@@ -22,4 +22,9 @@ public class GameContext : Singleton<GameContext>
 
     [Header("Vars")]
     [SerializeField] private Statement _state;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 }

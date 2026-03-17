@@ -14,7 +14,7 @@ public abstract class Entity : MonoBehaviour
 
         if (_entityData.IsNPC)
         {
-            Debug.Log("this is NPC");
+            //Debug.Log("this is NPC");
         }
     }
 
