@@ -24,8 +24,8 @@ public class CycleManager : MonoBehaviour
     // TODO: если CycleOrder пуст - unity смерт
     public async UniTask EntitySpawnTask(CancellationToken token)
     {
-        var gameContext = GameContext.Instance;
-        var cycleOrder = gameContext.Player.CycleOrder;
+        var gameManager = GameManager.Instance;
+        var cycleOrder = gameManager.Player.CycleOrder;
 
         OnCycleCancel(token).Forget();
 
@@ -42,7 +42,7 @@ public class CycleManager : MonoBehaviour
             {
                 token.ThrowIfCancellationRequested();
 
-                EntityData entityData = gameContext.Gamble.RollEntity(item);
+                EntityData entityData = gameManager.Gamble.RollEntity(item);
                 if (entityData == null || entityData.EntityPrefab == null) { Debug.LogWarning("no"); continue; }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token); // walking
