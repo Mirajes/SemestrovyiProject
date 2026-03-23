@@ -393,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &177178128
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5105,7 +5105,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1012862281}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.0000008940697}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -5336,7 +5336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 959.71063, y: -114.635}
+  m_AnchoredPosition: {x: 959.68994, y: -114.635}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1645002990
@@ -5685,8 +5685,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1568789823}
   m_HandleRect: {fileID: 1568789822}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9999991
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5951,6 +5951,9 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 519420032}
   - {fileID: 304365858}
+  - {fileID: 1645002991}
+  - {fileID: 1806441455}
+  - {fileID: 177178129}
   - {fileID: 53133351}
   - {fileID: 486095591}
   - {fileID: 1572570862}
@@ -5961,6 +5964,3 @@ SceneRoots:
   - {fileID: 870360308}
   - {fileID: 1046289644}
   - {fileID: 918283621}
-  - {fileID: 1645002991}
-  - {fileID: 1806441455}
-  - {fileID: 177178129}
