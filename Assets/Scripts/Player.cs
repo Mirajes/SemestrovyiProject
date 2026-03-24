@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public List<ItemData> CycleOrder => _cycleOrder;
+    public int CycleOrderMaxSize => _cycleOrderMaxSize;
     public List<ItemData> FightOrder => _fightOrder;
+    public int FightOrderMaxSize => _fightOrderMaxSize;
     public Dictionary<ItemData, int> MainInventory => _mainInventory;
     public Dictionary<ItemData, int> CycleInventory => _cycleInventory;
 
@@ -15,9 +17,9 @@ public class Player : MonoBehaviour
     [SerializeField] private SerializedDictionary<ItemData, int> _cycleInventory;
 
     [SerializeField] private List<ItemData> _cycleOrder = new();
-    [SerializeField] private int _cycleOrderMaxSize = new();
+    [SerializeField] private int _cycleOrderMaxSize = 3;
     [SerializeField] private List<ItemData> _fightOrder = new();
-    [SerializeField] private int _fightOrderMaxSize = new();
+    [SerializeField] private int _fightOrderMaxSize = 3;
 
     public void ModifyCycleInventory(ItemData item,  int count)
     {
@@ -29,9 +31,9 @@ public class Player : MonoBehaviour
 
     public void ModifyMainInventory(ItemData item, int count)
     {
-        if (_cycleInventory.ContainsKey(item))
-            _cycleInventory[item] += count; // okak
+        if (_mainInventory.ContainsKey(item))
+            _mainInventory[item] += count; // okak
         else
-            _cycleInventory.Add(item, count);
+            _mainInventory.Add(item, count);
     }
 }

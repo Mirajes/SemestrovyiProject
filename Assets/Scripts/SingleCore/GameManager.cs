@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class GameManager : A_Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
     private List<ItemData> _itemDatas;
     private CancellationTokenSource _cts;
     private InputSystem_Actions _inputMap;
+
+    public static GameManager Instance => _instance;
+    private static GameManager _instance;
 
     public static Action<Entity> ReturnFromCycle;
     public static Action<Statement> ChangeState;
@@ -28,14 +32,21 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private CycleManager _cycleManager;
     [SerializeField] private HomeManager _homeManager;
     [SerializeField] private CursorManager _cursorManager;
+    [SerializeField] private CameraManager _cameraManager;
     private GambleLogic _gamble = new();
 
     [Header("Vars")]
     [SerializeField] private Statement _state;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        if (_instance == null)
+            _instance = this;
+        else
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+
         _itemDatas = Resources.LoadAll<ItemData>("Items").ToList(); // zachem
     }
 
@@ -55,6 +66,7 @@ public class GameManager : A_Singleton<GameManager>
         ReturnFromCycle += OnReturnFromCycle;
 
         #region Test
+        _inputMap.Player.testUpdateAll.started += OnTestUpdate;
         GameManager.ChangeState?.Invoke(_state);
         #endregion
     }
@@ -67,11 +79,18 @@ public class GameManager : A_Singleton<GameManager>
 
         ChangeState -= OnStateChanged;
         ReturnFromCycle -= OnReturnFromCycle;
+
+        _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
 
     private void OnDestroy()
     {
+        _instance = null;
+    }
 
+    private void OnTestUpdate(InputAction.CallbackContext callback)
+    {
+        OnStateChanged(_state);
     }
 
     private void OnReturnFromCycle(Entity entity)
@@ -84,16 +103,22 @@ public class GameManager : A_Singleton<GameManager>
         switch (state)
         {
             case Statement.Home:
-                _cts.Cancel();
-                _cts.Dispose();
+                if (_cts != null)
+                {
+                    _cts.Cancel();
+                    _cts.Dispose();
+                    _cts = null;
+                }
 
                 _player.transform.position = _homeManager.PlayerHomePos.position;
+                _cameraManager.FollowTarget(_cameraManager.HomePos).Forget();
                 break;
             case Statement.Cycle:
                 _cts = new();
                 _cycleManager.EntitySpawnTask(_cts.Token).Forget();
 
                 _player.transform.position = _cycleManager.PlayerSpawnPos.position;
+                _cameraManager.FollowTarget(_cameraManager.CyclePos).Forget();
                 break;
             default:
                 Debug.LogWarning("where state");

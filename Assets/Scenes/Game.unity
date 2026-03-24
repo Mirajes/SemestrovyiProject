@@ -3898,6 +3898,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738959640}
   m_CullTransparentMesh: 1
+--- !u!1 &762305801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 762305802}
+  m_Layer: 0
+  m_Name: -- CAMERA --
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &762305802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762305801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &817206072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3974,6 +4005,7 @@ GameObject:
   - component: {fileID: 817695685}
   - component: {fileID: 817695684}
   - component: {fileID: 817695686}
+  - component: {fileID: 817695687}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4013,6 +4045,7 @@ MonoBehaviour:
   _cycleManager: {fileID: 817695685}
   _homeManager: {fileID: 817695684}
   _cursorManager: {fileID: 817695686}
+  _cameraManager: {fileID: 817695687}
   _state: 0
 --- !u!114 &817695684
 MonoBehaviour:
@@ -4058,6 +4091,23 @@ MonoBehaviour:
   _minPassDistance: 1
   _maxPassDistance: 2
   _cursorSpeed: 0
+--- !u!114 &817695687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817695680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d92d40883f42141ab446e61c21117e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 519420031}
+  _orthographicSize: 5
+  _lerpT: 0.1
+  _cyclePos: {fileID: 1035316582}
+  _homePos: {fileID: 1233640387}
 --- !u!1 &825706225
 GameObject:
   m_ObjectHideFlags: 0
@@ -4491,6 +4541,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1035316581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1035316582}
+  m_Layer: 0
+  m_Name: CycleCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1035316582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035316581}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1046289642
 GameObject:
   m_ObjectHideFlags: 0
@@ -4738,6 +4819,37 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!1 &1233640386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233640387}
+  m_Layer: 0
+  m_Name: HomeCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1233640387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233640386}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16, y: 1.7, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382865661
 GameObject:
   m_ObjectHideFlags: 0
@@ -5949,18 +6061,21 @@ SceneRoots:
   - {fileID: 817695681}
   - {fileID: 1161746721}
   - {fileID: 619394802}
-  - {fileID: 519420032}
   - {fileID: 304365858}
-  - {fileID: 1645002991}
-  - {fileID: 1806441455}
-  - {fileID: 177178129}
   - {fileID: 53133351}
   - {fileID: 486095591}
   - {fileID: 1572570862}
   - {fileID: 906471472}
   - {fileID: 993274294}
   - {fileID: 1213271461}
+  - {fileID: 1645002991}
+  - {fileID: 1806441455}
+  - {fileID: 177178129}
   - {fileID: 730441665}
   - {fileID: 870360308}
   - {fileID: 1046289644}
   - {fileID: 918283621}
+  - {fileID: 762305802}
+  - {fileID: 519420032}
+  - {fileID: 1035316582}
+  - {fileID: 1233640387}
