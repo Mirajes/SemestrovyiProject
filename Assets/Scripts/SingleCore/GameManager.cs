@@ -100,16 +100,16 @@ public class GameManager : MonoBehaviour
 
     private void OnStateChanged(Statement state)
     {
+        if (_cts != null)
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = null;
+        }
+
         switch (state)
         {
             case Statement.Home:
-                if (_cts != null)
-                {
-                    _cts.Cancel();
-                    _cts.Dispose();
-                    _cts = null;
-                }
-
                 _player.transform.position = _homeManager.PlayerHomePos.position;
                 _cameraManager.FollowTarget(_cameraManager.HomePos).Forget();
                 break;
