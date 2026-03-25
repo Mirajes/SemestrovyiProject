@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     public static Action<Entity> ReturnFromCycle;
     public static Action<Statement> ChangeState;
+    public static Action<Entity> EntityDie;
 
     [Header("Public Signleton")]
     public Player Player => _player;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HomeManager _homeManager;
     [SerializeField] private CursorManager _cursorManager;
     [SerializeField] private CameraManager _cameraManager;
+    [SerializeField] private GameUI _gameUI;
     private GambleLogic _gamble = new();
 
     [Header("Vars")]
@@ -48,6 +50,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         _itemDatas = Resources.LoadAll<ItemData>("Items").ToList(); // zachem
+
+        UIService.Instance.Register(_gameUI);
+        UIService.Instance.Register(_gameUI.HeathBar);
     }
 
     private void Start()
@@ -60,10 +65,12 @@ public class GameManager : MonoBehaviour
         _inputMap = new();
         _inputMap.Player.Attack.started += _cursorManager.OnAttackInput;
         _inputMap.Player.Attack.canceled += _cursorManager.OnAttackInput;
+        _inputMap.Player.CursorPosition.performed += _cursorManager.OnCursorPos;
         _inputMap.Enable();
 
         ChangeState += OnStateChanged;
         ReturnFromCycle += OnReturnFromCycle;
+        EntityDie += OnEntityDie;
 
         #region Test
         _inputMap.Player.testUpdateAll.started += OnTestUpdate;
@@ -75,10 +82,12 @@ public class GameManager : MonoBehaviour
     {
         _inputMap.Player.Attack.started -= _cursorManager.OnAttackInput;
         _inputMap.Player.Attack.canceled -= _cursorManager.OnAttackInput;
+        _inputMap.Player.CursorPosition.performed -= _cursorManager.OnCursorPos;
         _inputMap.Dispose();
 
         ChangeState -= OnStateChanged;
         ReturnFromCycle -= OnReturnFromCycle;
+        EntityDie -= OnEntityDie; 
 
         _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
@@ -86,7 +95,12 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         _instance = null;
+
+        UIService.Instance.Clear();
     }
+
+    /*
+    */
 
     private void OnTestUpdate(InputAction.CallbackContext callback)
     {
@@ -95,7 +109,8 @@ public class GameManager : MonoBehaviour
 
     private void OnReturnFromCycle(Entity entity)
     {
-        Destroy(entity.gameObject);
+        if (entity != null)
+            Destroy(entity.gameObject);
     }
 
     private void OnStateChanged(Statement state)
@@ -124,5 +139,19 @@ public class GameManager : MonoBehaviour
                 Debug.LogWarning("where state");
                 break;
         }
+    }
+
+    private void OnEntityDie(Entity entity)
+    {
+        if (entity == null) return;
+
+        var entityData = entity.EntityData;
+        foreach (var item in entityData.Drop.Keys)
+        {
+            int count = entityData.Drop[item]; // * multiplier
+            _player.ModifyCycleInventory(item, count);
+        }
+
+        Destroy(entity.gameObject);
     }
 }

@@ -18,4 +18,5 @@ public class EntityData : ScriptableObject
     public float BaseHP => _baseHP;
     public Entity EntityPrefab => _entityPrefab;
     public bool IsNPC => _isNPC;
+    public SerializedDictionary<ItemData, int> Drop => _drop;
 }

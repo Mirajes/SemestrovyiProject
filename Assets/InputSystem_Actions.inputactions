@@ -25,6 +25,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Drag",
+                    "type": "Button",
+                    "id": "3ba7d3ab-f780-4619-b352-011575c01c00",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "testUpdateAll",
                     "type": "Button",
                     "id": "d542f5a1-43dc-48c9-952b-19d99b5f05e4",
@@ -65,6 +74,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "testUpdateAll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5744e5cf-06b1-4b3a-8af3-a52aee1b77da",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

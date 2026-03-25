@@ -257,3 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63681be8e69052540887d13d69d52a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _EntityData: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
+  _MaxHealth: 0
+  _CurrentHealth: 0

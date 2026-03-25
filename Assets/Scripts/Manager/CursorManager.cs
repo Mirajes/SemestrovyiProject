@@ -13,7 +13,7 @@ public class CursorManager : MonoBehaviour
     [Header("Vars")]
     [SerializeField] private bool _isAttacking;
     [SerializeField] private Vector2 _cursorPos;
-    //private Vector2 _prevViewport;
+    private Vector3 _prevViewport;
 
     [Header("Cursor Hit Settings")]
     [SerializeField] private float _minPassDistance = 1f;
@@ -25,7 +25,17 @@ public class CursorManager : MonoBehaviour
 
     private void Update()
     {
-        return;   
+        if (_isAttacking)
+        {
+            Vector3 viewport = (Vector2)Camera.main.ScreenToViewportPoint(_cursorPos);
+            float deltaTime = Mathf.Max(Time.unscaledDeltaTime, 1e-6f); // chto eto?
+            _cursorSpeed = (viewport - _prevViewport).magnitude / deltaTime;
+            _prevViewport = viewport;
+        }
+        else
+        {
+            _cursorSpeed = 0f; // stoit li? mozhno zhe onulirovat' v input.cancelled
+        }
     }
 }
 /*

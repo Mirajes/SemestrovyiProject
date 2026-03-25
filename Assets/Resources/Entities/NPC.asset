@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: pozor
   _description: 
   _baseHP: 1
-  _entityPrefab: {fileID: 5344097398440828614, guid: 914a8e67c5c07464fadcd3e09a03c4eb, type: 3}
+  _entityPrefab: {fileID: 4362925065106056515, guid: 914a8e67c5c07464fadcd3e09a03c4eb, type: 3}
   _isNPC: 1
   _drop:
     _serializedList: []
