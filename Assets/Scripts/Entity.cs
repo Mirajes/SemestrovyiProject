@@ -27,7 +27,6 @@ public abstract class Entity : MonoBehaviour
     private void OnMouseExit()
     {
         var cursorManager = GameManager.Instance.CursorManager;
-        print(cursorManager.CursorSpeed);
         if (cursorManager.IsAttacking && _isPassing)
             TakeDamage(cursorManager.CursorSpeed);
         else
@@ -49,7 +48,7 @@ public abstract class Entity : MonoBehaviour
         UpdateHealthAmount(_MaxHealth, _CurrentHealth);
     }
 
-    private void TakeDamage(float damage, float mult = 0.01f)
+    private void TakeDamage(float damage, float mult = 0.1f)
     {
         _CurrentHealth -= damage * mult;
 

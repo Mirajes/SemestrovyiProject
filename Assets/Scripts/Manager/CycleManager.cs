@@ -43,7 +43,7 @@ public class CycleManager : MonoBehaviour
                 token.ThrowIfCancellationRequested();
 
                 EntityData entityData = gameManager.Gamble.RollEntity(item);
-                if (entityData == null || entityData.EntityPrefab == null) { Debug.LogWarning("no"); continue; }
+                if (entityData == null || entityData.EntityPrefab == null) { Debug.LogWarning("no entity"); continue; }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token); // walking
 

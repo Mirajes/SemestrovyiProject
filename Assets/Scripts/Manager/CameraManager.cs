@@ -28,12 +28,12 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void UpdatePullOffset(Vector2 cursorPosition, Vector2 screenSize, out Vector2 targetOffset)
-    {
-        Vector2 screenCenter = screenSize * 0.5f;
-        Vector2 delta = cursorPosition - screenCenter;
-        Vector2 direction = delta.normalized;
+    //public void UpdatePullOffset(Vector2 cursorPosition, Vector2 screenSize, out Vector2 targetOffset)
+    //{
+    //    Vector2 screenCenter = screenSize * 0.5f;
+    //    Vector2 delta = cursorPosition - screenCenter;
+    //    Vector2 direction = delta.normalized;
 
-        targetOffset = -new Vector3(direction.x, direction.y, 0f) * _pullStrenght;
-    }
+    //    targetOffset = -new Vector3(direction.x, direction.y, 0f) * _pullStrenght;
+    //}
 }

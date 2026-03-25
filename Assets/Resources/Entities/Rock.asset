@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Rock
   _description: 
+  _baseHP: 15
   _entityPrefab: {fileID: 2591277297231879006, guid: 682b56bf34a184849bb4057ef446528b, type: 3}
   _isNPC: 0
   _drop:

@@ -18,4 +18,6 @@ MonoBehaviour:
   _entityPrefab: {fileID: 4362925065106056515, guid: 914a8e67c5c07464fadcd3e09a03c4eb, type: 3}
   _isNPC: 1
   _drop:
-    _serializedList: []
+    _serializedList:
+    - Key: {fileID: 11400000, guid: 56f39ccba1888bb40af606ff2fcba35e, type: 2}
+      Value: 1
