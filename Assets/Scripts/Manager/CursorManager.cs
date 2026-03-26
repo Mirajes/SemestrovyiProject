@@ -37,6 +37,14 @@ public class CursorManager : MonoBehaviour
             _cursorSpeed = 0f; // stoit li? mozhno zhe onulirovat' v input.cancelled
         }
     }
+
+    public RaycastHit2D Raycast(out RaycastHit2D hit)
+    {
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(_cursorPos);
+
+        hit = Physics2D.Raycast(worldPos, Vector2.zero);
+        return hit;
+    }
 }
 /*
 

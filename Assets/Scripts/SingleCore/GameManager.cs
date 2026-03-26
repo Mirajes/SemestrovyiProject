@@ -15,9 +15,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => _instance;
     private static GameManager _instance;
 
+    [Header("Actions")]
     public static Action<Entity> ReturnFromCycle;
     public static Action<Statement> ChangeState;
     public static Action<Entity> EntityDie;
+    public static Action<SelectAction> DoAction;
 
     [Header("Public Signleton")]
     public Player Player => _player;
@@ -71,6 +73,7 @@ public class GameManager : MonoBehaviour
         ChangeState += OnStateChanged;
         ReturnFromCycle += OnReturnFromCycle;
         EntityDie += OnEntityDie;
+        DoAction += OnDoAction;
 
         #region Test
         _inputMap.Player.testUpdateAll.started += OnTestUpdate;
@@ -88,6 +91,7 @@ public class GameManager : MonoBehaviour
         ChangeState -= OnStateChanged;
         ReturnFromCycle -= OnReturnFromCycle;
         EntityDie -= OnEntityDie; 
+        DoAction -= OnDoAction;
 
         _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
@@ -122,18 +126,19 @@ public class GameManager : MonoBehaviour
             _cts = null;
         }
 
+        _cts = new();
+
         switch (state)
         {
             case Statement.Home:
                 _player.transform.position = _homeManager.PlayerHomePos.position;
-                _cameraManager.FollowTarget(_cameraManager.HomePos).Forget();
+                _cameraManager.FollowTarget(_cts.Token, _cameraManager.HomePos).Forget();
                 break;
             case Statement.Cycle:
-                _cts = new();
-                _cycleManager.EntitySpawnTask(_cts.Token).Forget();
-
                 _player.transform.position = _cycleManager.PlayerSpawnPos.position;
-                _cameraManager.FollowTarget(_cameraManager.CyclePos).Forget();
+                _cameraManager.FollowTarget(_cts.Token, _cameraManager.CyclePos).Forget();
+
+                _cycleManager.EntitySpawnTask(_cts.Token).Forget();
                 break;
             default:
                 Debug.LogWarning("where state");
@@ -153,5 +158,27 @@ public class GameManager : MonoBehaviour
         }
 
         Destroy(entity.gameObject);
+    }
+
+    private void OnDoAction(SelectAction action)
+    {
+        switch (action)
+        {
+            case SelectAction.ToCycle:
+                _state = Statement.Cycle;
+                ChangeState?.Invoke(_state);
+                break;
+            case SelectAction.ToHome:
+                _state = Statement.Home;
+                ChangeState?.Invoke(_state);
+                break;
+            case SelectAction.OpenInventory:
+                break;
+            case SelectAction.OpenMind:
+                break;
+            default:
+                Debug.Log($"how {action}");
+                break;
+        }
     }
 }

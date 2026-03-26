@@ -61,6 +61,6 @@ public class CycleManager : MonoBehaviour
         float cd = 3f;
 
         token.ThrowIfCancellationRequested();
-        await UniTask.Delay(TimeSpan.FromSeconds(cd));
+        await UniTask.Delay(TimeSpan.FromSeconds(cd), cancellationToken:token);
     }
 }

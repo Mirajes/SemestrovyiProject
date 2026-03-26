@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -15,16 +16,19 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Transform _cyclePos;
     [SerializeField] private Transform _homePos;
 
-    public async UniTask FollowTarget(Transform target) // + token
+    public async UniTask FollowTarget(CancellationToken token, Transform target) // + token
     {
+        token.ThrowIfCancellationRequested();
+
         while (_mainCamera.transform.position != target.position)
         {
             _mainCamera.transform.position = Vector3.Lerp(
             _mainCamera.transform.position,
             target.position,
             _lerpT);
+            await UniTask.DelayFrame(1);
 
-            await UniTask.Delay(10);
+            token.ThrowIfCancellationRequested();
         }
     }
 

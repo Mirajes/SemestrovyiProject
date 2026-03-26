@@ -14,18 +14,14 @@ public class GameUI : MonoBehaviour
     [SerializeField] private RectTransform _cycleOrderTransform;
     [SerializeField] private RectTransform _cycleOrderContainer;
 
+    [Header("Prefabs")]
+    [SerializeField] private InventorySlot _slotPrefab;
+ 
     public void InitCycleOrder(int slotCount)
     {
-
-    }
-
-    public void UpdateCycleOrder(int index, ItemData itemToChange)
-    {
-
-    }
-
-    public List<ItemData> SaveCycleOrder()
-    {
-        return null;
+        for (int i = 0; i < slotCount; i++)
+        {
+            InventorySlot newSlot = Instantiate(_slotPrefab, _cycleOrderContainer);
+        }
     }
 }
