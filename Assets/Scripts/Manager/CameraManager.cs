@@ -8,9 +8,9 @@ public class CameraManager : MonoBehaviour
     public Transform HomePos => _homePos;
 
     [SerializeField] private Camera _mainCamera;
-    [SerializeField] private float _orthographicSize = 5f;
+    //[SerializeField] private float _orthographicSize = 5f;
     [SerializeField] private float _lerpT = 0.1f;
-    [SerializeField] private float _pullStrenght = 5f;
+    //[SerializeField] private float _pullStrenght = 5f;
 
     [SerializeField] private Transform _cyclePos;
     [SerializeField] private Transform _homePos;

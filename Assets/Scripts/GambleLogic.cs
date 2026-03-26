@@ -3,7 +3,7 @@ using UnityEngine;
 public class GambleLogic
 {
 
-    public EntityData RollEntity(ItemData item)
+    public EntityData RollEntity(ItemData item) // pererabotat'
     {
         if (item.ChanceMaker.Count <= 0) { Debug.Log($"a kak rollit' {item}"); return null; }
 
