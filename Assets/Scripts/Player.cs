@@ -36,4 +36,17 @@ public class Player : MonoBehaviour
         else
             _mainInventory.Add(item, count);
     }
+
+    public void ConvertCycleToMain()
+    {
+        foreach (ItemData item in _cycleInventory.Keys)
+        {
+            if (_mainInventory.ContainsKey(item))
+                _mainInventory[item] += _cycleInventory[item];
+            else
+                _mainInventory.Add(item, _cycleInventory[item]);
+        }
+
+        _cycleInventory.Clear();
+    }
 }

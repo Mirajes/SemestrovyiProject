@@ -24,4 +24,14 @@ public class GameUI : MonoBehaviour
             InventorySlot newSlot = Instantiate(_slotPrefab, _cycleOrderContainer);
         }
     }
+
+    public void ShowMainInventory()
+    {
+        _mainInventoryTransform.gameObject.SetActive(true);
+    }
+
+    public void ShowCycleInventory()
+    {
+
+    }
 }

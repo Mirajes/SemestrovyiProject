@@ -133,6 +133,8 @@ public class GameManager : MonoBehaviour
             case Statement.Home:
                 _player.transform.position = _homeManager.PlayerHomePos.position;
                 _cameraManager.FollowTarget(_cts.Token, _cameraManager.HomePos).Forget();
+
+                _player.ConvertCycleToMain();
                 break;
             case Statement.Cycle:
                 _player.transform.position = _cycleManager.PlayerSpawnPos.position;
@@ -173,6 +175,7 @@ public class GameManager : MonoBehaviour
                 ChangeState?.Invoke(_state);
                 break;
             case SelectAction.OpenInventory:
+                _gameUI.ShowMainInventory();
                 break;
             case SelectAction.OpenMind:
                 break;
