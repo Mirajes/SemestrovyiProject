@@ -83,18 +83,18 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //eventData.pointerDrag.TryGetComponent<InventorySlot>(out InventorySlot slot);
-        //if (slot != null && slot.IsOrdered)
-        //{
+        eventData.pointerDrag.TryGetComponent<InventorySlot>(out InventorySlot slot);
+        if (slot != null && slot.IsOrdered)
+        {
 
 
-        //}
-        //else
-        //{
-        //    transform.SetSiblingIndex(0); // sibling - dochernyi v parent'e
-        //    transform.SetParent(_parentBeforeDrag);
-        //    _image.raycastTarget = true;
-        //}
+        }
+        else
+        {
+            transform.SetSiblingIndex(0); // sibling - dochernyi v parent'e
+            transform.SetParent(_parentBeforeDrag);
+            _image.raycastTarget = true;
+        }
 
         _image.color = Color.white;
     }

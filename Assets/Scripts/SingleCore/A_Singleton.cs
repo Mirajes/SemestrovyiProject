@@ -20,6 +20,15 @@ public abstract class A_Singleton<T> : MonoBehaviour where T : class
         Init();
     }
 
+    protected virtual void OnDestroy()
+    {
+        if (Instance == this as T)
+        {
+            DeInit();
+            Instance = null;
+        }
+    }
+
     protected virtual void Init() 
     {
 

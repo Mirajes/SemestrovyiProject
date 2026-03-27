@@ -90,8 +90,9 @@ public class GameManager : A_Singleton<GameManager>
         _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         UIService.Instance.Clear();
     }
 
