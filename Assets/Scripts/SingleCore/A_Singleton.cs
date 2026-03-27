@@ -7,20 +7,17 @@ public abstract class A_Singleton<T> : MonoBehaviour where T : class
     protected virtual void Awake()
     {
         if (Instance == null)
+        {
             Instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
         else
+        {
             Destroy(gameObject);
+            return;
+        }
 
-        DontDestroyOnLoad(gameObject);
         Init();
-    }
-
-    private void OnDestroy()
-    {
-        print($"{Instance} is destroying");
-
-        if (Instance == this as T)
-            Instance = null;
     }
 
     protected virtual void Init() 

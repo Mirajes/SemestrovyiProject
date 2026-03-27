@@ -6,13 +6,12 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameManager : MonoBehaviour
+public class GameManager : A_Singleton<GameManager>
 {
     private List<ItemData> _itemDatas;
     private CancellationTokenSource _cts;
     private InputSystem_Actions _inputMap;
 
-    public static GameManager Instance => _instance;
     private static GameManager _instance;
 
     [Header("Actions")]
@@ -42,15 +41,10 @@ public class GameManager : MonoBehaviour
     [Header("Vars")]
     [SerializeField] private Statement _state;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (_instance == null)
-            _instance = this;
-        else
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
-
+        base.Awake();
+      
         _itemDatas = Resources.LoadAll<ItemData>("Items").ToList(); // zachem
 
         UIService.Instance.Register(_gameUI);
@@ -98,8 +92,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        _instance = null;
-
         UIService.Instance.Clear();
     }
 
@@ -135,6 +127,7 @@ public class GameManager : MonoBehaviour
                 _cameraManager.FollowTarget(_cts.Token, _cameraManager.HomePos).Forget();
 
                 _player.ConvertCycleToMain();
+                _gameUI.UpdateMainInventory(_player.MainInventory);
                 break;
             case Statement.Cycle:
                 _player.transform.position = _cycleManager.PlayerSpawnPos.position;
