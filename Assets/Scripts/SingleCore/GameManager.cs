@@ -12,7 +12,7 @@ public class GameManager : A_Singleton<GameManager>
     private CancellationTokenSource _cts;
     private InputSystem_Actions _inputMap;
 
-    private static GameManager _instance;
+    private static GameManager _instance; // ?
 
     [Header("Actions")]
     public static Action<Entity> ReturnFromCycle;
@@ -30,7 +30,7 @@ public class GameManager : A_Singleton<GameManager>
 
     [Header("Links")]
     [SerializeField] private Player _player;
-    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private GameManager _gameManager; // ?
     [SerializeField] private CycleManager _cycleManager;
     [SerializeField] private HomeManager _homeManager;
     [SerializeField] private CursorManager _cursorManager;
