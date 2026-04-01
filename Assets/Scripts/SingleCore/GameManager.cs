@@ -44,11 +44,13 @@ public class GameManager : A_Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-      
+
         _itemDatas = Resources.LoadAll<ItemData>("Items").ToList(); // zachem
 
         UIService.Instance.Register(_gameUI);
         UIService.Instance.Register(_gameUI.HeathBar);
+
+        _homeManager.Init();
     }
 
     private void Start()

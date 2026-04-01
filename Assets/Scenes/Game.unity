@@ -4567,6 +4567,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerHomePos: {fileID: 906471472}
+  _rooms:
+  - {fileID: 1174588639}
 --- !u!114 &817695685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5549,6 +5551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1174588638}
   - component: {fileID: 1174588637}
+  - component: {fileID: 1174588639}
   m_Layer: 0
   m_Name: home_0
   m_TagString: Untagged
@@ -5626,6 +5629,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1174588639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174588636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b11667299d9b4474d8539bbcb229e715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isUnlocked: 0
 --- !u!1 &1176502126
 GameObject:
   m_ObjectHideFlags: 0
@@ -8553,6 +8569,7 @@ SceneRoots:
   - {fileID: 1572570862}
   - {fileID: 906471472}
   - {fileID: 993274294}
+  - {fileID: 1174588638}
   - {fileID: 1645002991}
   - {fileID: 17542116}
   - {fileID: 177178129}
@@ -8563,4 +8580,3 @@ SceneRoots:
   - {fileID: 730441665}
   - {fileID: 870360308}
   - {fileID: 1046289644}
-  - {fileID: 1174588638}
