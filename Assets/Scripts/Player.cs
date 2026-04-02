@@ -27,6 +27,9 @@ public class Player : MonoBehaviour
             _cycleInventory[item] += count; // для отрицательных -- вычитает
         else 
             _cycleInventory.Add(item, count);
+
+        var gameUI = UIService.Instance.Get<GameUI>();
+        gameUI.UpdateCycleInventory(item, count);
     }
 
     public void ModifyMainInventory(ItemData item, int count)
@@ -35,6 +38,9 @@ public class Player : MonoBehaviour
             _mainInventory[item] += count; // okak
         else
             _mainInventory.Add(item, count);
+
+        var gameUI = UIService.Instance.Get<GameUI>();
+        gameUI.UpdateMainInventory(_mainInventory);
     }
 
     public void ConvertCycleToMain()

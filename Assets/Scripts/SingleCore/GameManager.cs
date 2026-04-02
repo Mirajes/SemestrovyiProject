@@ -19,6 +19,7 @@ public class GameManager : A_Singleton<GameManager>
     public static Action<Statement> ChangeState;
     public static Action<Entity> EntityDie;
     public static Action<SelectAction> DoAction;
+    public static Action<ItemData> CraftItem;
 
     [Header("Public Signleton")]
     public Player Player => _player;
@@ -50,6 +51,7 @@ public class GameManager : A_Singleton<GameManager>
         UIService.Instance.Register(_gameUI);
         UIService.Instance.Register(_gameUI.HeathBar);
 
+        _gameUI.InitCraftWindow(_itemDatas);
         _homeManager.Init();
     }
 
@@ -70,6 +72,7 @@ public class GameManager : A_Singleton<GameManager>
         ReturnFromCycle += OnReturnFromCycle;
         EntityDie += OnEntityDie;
         DoAction += OnDoAction;
+        CraftItem += OnCraftItem;
 
         #region Test
         _inputMap.Player.testUpdateAll.started += OnTestUpdate;
@@ -88,6 +91,7 @@ public class GameManager : A_Singleton<GameManager>
         ReturnFromCycle -= OnReturnFromCycle;
         EntityDie -= OnEntityDie; 
         DoAction -= OnDoAction;
+        CraftItem -= OnCraftItem;
 
         _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
@@ -178,6 +182,38 @@ public class GameManager : A_Singleton<GameManager>
             default:
                 Debug.Log($"how {action}");
                 break;
+        }
+    }
+
+    private void OnCraftItem(ItemData itemData)
+    {
+        if (itemData == null) { Debug.LogWarning("no item"); return; }
+
+        int isEnough = 0;
+
+        // enough checker
+        foreach (var receiptItem in itemData.ItemReceipt.Keys)
+        {
+            if (_player.MainInventory.ContainsKey(receiptItem)
+                && _player.MainInventory[receiptItem] >= itemData.ItemReceipt[receiptItem])
+            {
+                isEnough++;
+            }
+            else
+            {
+                _gameUI.ShowPopUp(_cts.Token).Forget();
+                return;
+            }
+        }
+
+        // add to inv
+        // che blyat'?
+        if (isEnough == itemData.ItemReceipt.Count)
+        {
+            foreach (var receiptItem in itemData.ItemReceipt.Keys)
+            {
+                _player.ModifyMainInventory(itemData, -itemData.ItemReceipt[receiptItem]);
+            }
         }
     }
 }
