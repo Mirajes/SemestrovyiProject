@@ -45,9 +45,13 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    public void InitCycleOrder(int slotCount)
+    public void InitCycleOrder(List<ItemData> cycleOrder)
     {
-
+        foreach (ItemData item in cycleOrder)
+        {
+            var newItemSlot = Instantiate(_slotPrefab, _cycleOrderContainer);
+            newItemSlot.Init(item);
+        }
     }
 
     public void ShowMainInventory()

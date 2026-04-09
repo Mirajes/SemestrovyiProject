@@ -56,6 +56,7 @@ public class GameManager : A_Singleton<GameManager>
         UIService.Instance.Register(_gameUI.HeathBar);
 
         _gameUI.InitCraftWindow(_itemDatas);
+        _gameUI.InitCycleOrder(_player.CycleOrder);
         _homeManager.Init();
     }
 
