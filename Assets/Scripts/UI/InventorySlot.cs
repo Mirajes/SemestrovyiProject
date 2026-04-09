@@ -19,6 +19,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         if (data == null)
         {
             _isOrdered = true;
+            SetCountText(count);
             return;
         }
 
@@ -27,9 +28,14 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         _image.sprite = _data.Sprite;
         gameObject.name = _data.Name;
 
+        SetCountText(count);
+    }
+
+    private void SetCountText(int count)
+    {
         if (count == 0)
             _countText.gameObject.SetActive(false);
-        else 
+        else
             _countText.text = count.ToString();
     }
 

@@ -47,10 +47,7 @@ public class GameUI : MonoBehaviour
 
     public void InitCycleOrder(int slotCount)
     {
-        for (int i = 0; i < slotCount; i++)
-        {
-            InventorySlot newSlot = Instantiate(_slotPrefab, _cycleOrderContainer);
-        }
+
     }
 
     public void ShowMainInventory()
