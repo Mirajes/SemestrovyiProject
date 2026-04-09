@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
             _cycleInventory.Add(item, count);
 
         var gameUI = UIService.Instance.Get<GameUI>();
-        gameUI.UpdateCycleInventory(item, count);
+        gameUI.UpdateCycleInventory(item, _cycleInventory[item]);
     }
 
     public void ModifyMainInventory(ItemData item, int count)
@@ -54,5 +54,8 @@ public class Player : MonoBehaviour
         }
 
         _cycleInventory.Clear();
+
+        var gameUI = UIService.Instance.Get<GameUI>();
+        gameUI.ResetCycleInventory();
     }
 }

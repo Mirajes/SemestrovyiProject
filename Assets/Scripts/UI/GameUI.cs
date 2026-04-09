@@ -116,5 +116,9 @@ public class GameUI : MonoBehaviour
     public void ResetCycleInventory()
     {
         _cycleInventory.Clear();
+        foreach (Transform item in _cycleInventoryContainer)
+        {
+            Destroy(item.gameObject);
+        }
     }
 }

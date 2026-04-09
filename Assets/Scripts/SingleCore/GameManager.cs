@@ -6,6 +6,10 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
+perepisat' VES' KOD NAHU
+*/
+
 public class GameManager : A_Singleton<GameManager>
 {
     private List<ItemData> _itemDatas;
@@ -16,9 +20,9 @@ public class GameManager : A_Singleton<GameManager>
 
     [Header("Actions")]
     public static Action<Entity> ReturnFromCycle;
-    public static Action<Statement> ChangeState;
+    public static Action<e_Statement> ChangeState;
     public static Action<Entity> EntityDie;
-    public static Action<SelectAction> DoAction;
+    public static Action<e_SelectAction> DoAction;
     public static Action<ItemData> CraftItem;
 
     [Header("Public Signleton")]
@@ -27,7 +31,7 @@ public class GameManager : A_Singleton<GameManager>
     public HomeManager HomeManager => _homeManager;
     public CursorManager CursorManager => _cursorManager;
     public GambleLogic Gamble => _gamble;
-    public Statement State => _state;
+    public e_Statement State => _state;
 
     [Header("Links")]
     [SerializeField] private Player _player;
@@ -40,7 +44,7 @@ public class GameManager : A_Singleton<GameManager>
     private GambleLogic _gamble = new();
 
     [Header("Vars")]
-    [SerializeField] private Statement _state;
+    [SerializeField] private e_Statement _state;
 
     protected override void Awake()
     {
@@ -57,7 +61,7 @@ public class GameManager : A_Singleton<GameManager>
 
     private void Start()
     {
-
+        _gameUI.UpdateMainInventory(_player.MainInventory);
     }
 
     private void OnEnable()
@@ -116,7 +120,7 @@ public class GameManager : A_Singleton<GameManager>
             Destroy(entity.gameObject);
     }
 
-    private void OnStateChanged(Statement state)
+    private void OnStateChanged(e_Statement state)
     {
         if (_cts != null)
         {
@@ -129,14 +133,14 @@ public class GameManager : A_Singleton<GameManager>
 
         switch (state)
         {
-            case Statement.Home:
+            case e_Statement.Home:
                 _player.transform.position = _homeManager.PlayerHomePos.position;
                 _cameraManager.FollowTarget(_cts.Token, _cameraManager.HomePos).Forget();
 
                 _player.ConvertCycleToMain();
                 _gameUI.UpdateMainInventory(_player.MainInventory);
                 break;
-            case Statement.Cycle:
+            case e_Statement.Cycle:
                 _player.transform.position = _cycleManager.PlayerSpawnPos.position;
                 _cameraManager.FollowTarget(_cts.Token, _cameraManager.CyclePos).Forget();
 
@@ -162,22 +166,22 @@ public class GameManager : A_Singleton<GameManager>
         Destroy(entity.gameObject);
     }
 
-    private void OnDoAction(SelectAction action)
+    private void OnDoAction(e_SelectAction action)
     {
         switch (action)
         {
-            case SelectAction.ToCycle:
-                _state = Statement.Cycle;
+            case e_SelectAction.ToCycle:
+                _state = e_Statement.Cycle;
                 ChangeState?.Invoke(_state);
                 break;
-            case SelectAction.ToHome:
-                _state = Statement.Home;
+            case e_SelectAction.ToHome:
+                _state = e_Statement.Home;
                 ChangeState?.Invoke(_state);
                 break;
-            case SelectAction.OpenInventory:
+            case e_SelectAction.OpenInventory:
                 _gameUI.ShowMainInventory();
                 break;
-            case SelectAction.OpenMind:
+            case e_SelectAction.OpenMind:
                 break;
             default:
                 Debug.Log($"how {action}");
@@ -212,8 +216,10 @@ public class GameManager : A_Singleton<GameManager>
         {
             foreach (var receiptItem in itemData.ItemReceipt.Keys)
             {
-                _player.ModifyMainInventory(itemData, -itemData.ItemReceipt[receiptItem]);
+                _player.ModifyMainInventory(receiptItem, -itemData.ItemReceipt[receiptItem]);
             }
+
+            _player.ModifyMainInventory(itemData, 1);
         }
     }
 }
