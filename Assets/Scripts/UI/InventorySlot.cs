@@ -11,6 +11,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     [SerializeField] private Image _image;
     [SerializeField] private TMP_Text _countText;
     [SerializeField] private bool _isOrdered = false;
+    [SerializeField] private Outline _outline;
 
     private Transform _parentBeforeDrag;
 
@@ -29,6 +30,11 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         gameObject.name = _data.Name;
 
         SetCountText(count);
+    }
+
+    public void OnOffOutline(bool isActive)
+    {
+        _outline.gameObject.SetActive(isActive);
     }
 
     private void SetCountText(int count)

@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     [SerializeField] private List<ItemData> _fightOrder = new();
     [SerializeField] private int _fightOrderMaxSize = 3;
 
+    [SerializeField] private int _cycleBreakTries = 0; // for breaking the order limits
+    [SerializeField] private int _fightBreakTries = 0;
+
     public void ModifyCycleInventory(ItemData item,  int count)
     {
         if (_cycleInventory.ContainsKey(item))
@@ -41,6 +44,40 @@ public class Player : MonoBehaviour
 
         var gameUI = UIService.Instance.Get<GameUI>();
         gameUI.UpdateMainInventory(_mainInventory);
+    }
+
+    public void AddToCycleOrder(ItemData item, int index) // nado overdose
+    {
+        int orderCount = _cycleOrder.Count;
+        
+        if (orderCount < _cycleOrderMaxSize)
+        {
+            _cycleOrder.Insert(index, item);
+            ModifyCycleInventory(item, -1);
+        }
+        else if (_cycleBreakTries >= 3)
+        {
+            _cycleOrder.Insert(index, item);
+            ModifyCycleInventory(item, -1);
+            // +overdose, +intMult
+        }
+        else if (orderCount == _cycleOrderMaxSize)
+        {
+            _cycleBreakTries++;
+            return; // anim
+        }
+    }
+
+    public void RemoveFromCycleOrder(ItemData item, int index)
+    {
+        _cycleOrder.RemoveAt(index);
+        ModifyCycleInventory(item, 1);
+
+        int orderCount = _cycleOrder.Count;
+        if (orderCount <= _cycleOrderMaxSize)
+        {
+            // -overdose, -intMult
+        }
     }
 
     public void ConvertCycleToMain()

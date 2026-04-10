@@ -48,6 +48,7 @@ public abstract class Entity : MonoBehaviour
         UpdateHealthAmount(_MaxHealth, _CurrentHealth);
     }
 
+    // divide to FromCursor and FromItem
     private void TakeDamage(float damage, float mult = 0.1f)
     {
         _CurrentHealth -= damage * mult;

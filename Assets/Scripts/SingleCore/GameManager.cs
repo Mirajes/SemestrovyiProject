@@ -24,6 +24,7 @@ public class GameManager : A_Singleton<GameManager>
     public static Action<Entity> EntityDie;
     public static Action<e_SelectAction> DoAction;
     public static Action<ItemData> CraftItem;
+    public static Action<float> IntelligenceAct;
 
     [Header("Public Signleton")]
     public Player Player => _player;
@@ -32,6 +33,7 @@ public class GameManager : A_Singleton<GameManager>
     public CursorManager CursorManager => _cursorManager;
     public GambleLogic Gamble => _gamble;
     public e_Statement State => _state;
+    public float IntelligenceCurrent => _intCurrent;
 
     [Header("Links")]
     [SerializeField] private Player _player;
@@ -44,13 +46,18 @@ public class GameManager : A_Singleton<GameManager>
     private GambleLogic _gamble = new();
 
     [Header("Vars")]
+    [SerializeField] private float _gameScale = 1f;
     [SerializeField] private e_Statement _state;
+    [SerializeField] private float _intCapMax = 100f; // Intelligence Capacity
+    [SerializeField] private float _intCurrent;
+    [SerializeField] private float _intConsumeMult = 1f;
+    [SerializeField] private float _walkTime = 1f;
 
     protected override void Awake()
     {
         base.Awake();
 
-        _itemDatas = Resources.LoadAll<ItemData>("Items").ToList(); // zachem
+        _itemDatas = Resources.LoadAll<ItemData>("Items").ToList();
 
         UIService.Instance.Register(_gameUI);
         UIService.Instance.Register(_gameUI.HeathBar);
@@ -63,6 +70,7 @@ public class GameManager : A_Singleton<GameManager>
     private void Start()
     {
         _gameUI.UpdateMainInventory(_player.MainInventory);
+        _intCurrent = _intCapMax;
     }
 
     private void OnEnable()
@@ -71,13 +79,14 @@ public class GameManager : A_Singleton<GameManager>
         _inputMap.Player.Attack.started += _cursorManager.OnAttackInput;
         _inputMap.Player.Attack.canceled += _cursorManager.OnAttackInput;
         _inputMap.Player.CursorPosition.performed += _cursorManager.OnCursorPos;
-        _inputMap.Enable();
+        _inputMap.Player.Enable();
 
         ChangeState += OnStateChanged;
         ReturnFromCycle += OnReturnFromCycle;
         EntityDie += OnEntityDie;
         DoAction += OnDoAction;
         CraftItem += OnCraftItem;
+        IntelligenceAct += OnIntelligenceAct;
 
         #region Test
         _inputMap.Player.testUpdateAll.started += OnTestUpdate;
@@ -97,6 +106,7 @@ public class GameManager : A_Singleton<GameManager>
         EntityDie -= OnEntityDie; 
         DoAction -= OnDoAction;
         CraftItem -= OnCraftItem;
+        IntelligenceAct -= OnIntelligenceAct;
 
         _inputMap.Player.testUpdateAll.started -= OnTestUpdate;
     }
@@ -222,5 +232,11 @@ public class GameManager : A_Singleton<GameManager>
 
             _player.ModifyMainInventory(itemData, 1);
         }
+    }
+
+    private void OnIntelligenceAct(float amount)
+    {
+        _intCurrent += amount;
+        // to ui
     }
 }

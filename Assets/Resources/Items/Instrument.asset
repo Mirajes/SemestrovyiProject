@@ -16,6 +16,7 @@ MonoBehaviour:
   _description: 
   _sprite: {fileID: 21300000, guid: c6f723a8cfae7874e945d486cb1569ed, type: 3}
   _isCanBeCrafted: 1
+  _itemClasses: 0000000001000000
   _chanceMaker:
     _serializedList:
     - Key: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}
