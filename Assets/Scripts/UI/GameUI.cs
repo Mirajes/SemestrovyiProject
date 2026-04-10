@@ -15,6 +15,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private RectTransform _warnPopUp;
 
     [Header("Inventories")]
+    [SerializeField] private RectTransform _inventoryTransform;
     [SerializeField] private RectTransform _mainInventoryTransform;
     [SerializeField] private RectTransform _mainInventoryContainer;
     [SerializeField] private RectTransform _cycleInventoryContainer;
@@ -54,9 +55,9 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    public void ShowMainInventory()
+    public void OpenInventory()
     {
-        _mainInventoryTransform.gameObject.SetActive(true);
+        _inventoryTransform.gameObject.SetActive(true);
         ShowButtonList();
     }
 

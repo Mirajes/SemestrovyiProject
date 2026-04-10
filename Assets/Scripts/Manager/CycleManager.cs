@@ -6,15 +6,15 @@ using UnityEngine;
 public class CycleManager : MonoBehaviour
 {
     [SerializeField] private Transform _playerSpawnPos;
-    [SerializeField] private Transform _entitySpawnPos;
+    [SerializeField] private Transform _entityStartSpawnPos;
+    [SerializeField] private Transform _entityEndSpawnPos;
 
     private Entity _currentEntity;
 
     public Transform PlayerSpawnPos => _playerSpawnPos;
-    public Transform EntitySpawnPos => _entitySpawnPos;
     public Entity CurrentEntity => _currentEntity;
 
-    private async UniTask OnCycleCancel(CancellationToken token)
+    private async UniTask OnCycleCancelTask(CancellationToken token)
     {
         await UniTask.WaitUntilCanceled(token);
         GameManager.ReturnFromCycle?.Invoke(_currentEntity);
@@ -27,14 +27,14 @@ public class CycleManager : MonoBehaviour
         var gameManager = GameManager.Instance;
         var cycleOrder = gameManager.Player.CycleOrder;
 
-        OnCycleCancel(token).Forget();
+        OnCycleCancelTask(token).Forget();
 
         while (true)
         {
             if (cycleOrder.Count == 0)
             {
-                Debug.Log("null");
-                await UniTask.Delay(TimeSpan.FromSeconds(1)); // против зависаний
+                Debug.LogWarning("no item");
+                await UniTask.Delay(TimeSpan.FromSeconds(1)); // bypass unityFreeze
                 continue;
             }
 
@@ -43,11 +43,16 @@ public class CycleManager : MonoBehaviour
                 token.ThrowIfCancellationRequested();
 
                 EntityData entityData = gameManager.Gamble.RollEntity(item);
-                if (entityData == null || entityData.EntityPrefab == null) { Debug.LogWarning("no entity"); continue; }
+
+                if (entityData == null || entityData.EntityPrefab == null) 
+                {
+                    Debug.LogWarning("no entity");
+                    continue;
+                }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token); // walking
 
-                _currentEntity = Instantiate(entityData.EntityPrefab, _entitySpawnPos.position, _entitySpawnPos.rotation);
+                _currentEntity = Instantiate(entityData.EntityPrefab, _entityEndSpawnPos.position, _entityEndSpawnPos.rotation);
                 _currentEntity.Init(entityData);
 
                 await UniTask.WaitWhile(() => _currentEntity != null, cancellationToken: token); // wait until kill
@@ -55,8 +60,13 @@ public class CycleManager : MonoBehaviour
         }
     }
 
+    private async UniTask FightOrderTask(CancellationToken token)
+    {
+
+    }
+
     public async UniTask ExtractHelperTask(CancellationToken token) {
-        OnCycleCancel(token).Forget();
+        OnCycleCancelTask(token).Forget();
 
         float cd = 3f;
 

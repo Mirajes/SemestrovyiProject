@@ -46,7 +46,7 @@ public class GameManager : A_Singleton<GameManager>
     private GambleLogic _gamble = new();
 
     [Header("Vars")]
-    [SerializeField] private float _gameScale = 1f;
+    [SerializeField] private float _gameSpeed = 1f;
     [SerializeField] private e_Statement _state;
     [SerializeField] private float _intCapMax = 100f; // Intelligence Capacity
     [SerializeField] private float _intCurrent;
@@ -190,7 +190,7 @@ public class GameManager : A_Singleton<GameManager>
                 ChangeState?.Invoke(_state);
                 break;
             case e_SelectAction.OpenInventory:
-                _gameUI.ShowMainInventory();
+                _gameUI.OpenInventory();
                 break;
             case e_SelectAction.OpenMind:
                 break;
