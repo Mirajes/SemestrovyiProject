@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class A_Singleton<T> : MonoBehaviour where T : class
 {
-    public static T Instance { get; private set; }
+    public T Instance { get; private set; }
 
     protected virtual void Awake()
     {
@@ -16,26 +16,5 @@ public abstract class A_Singleton<T> : MonoBehaviour where T : class
             Destroy(gameObject);
             return;
         }
-
-        Init();
-    }
-
-    protected virtual void OnDestroy()
-    {
-        if (Instance == this as T)
-        {
-            DeInit();
-            Instance = null;
-        }
-    }
-
-    protected virtual void Init() 
-    {
-
-    }
-
-    protected virtual void DeInit()
-    {
-
     }
 }
