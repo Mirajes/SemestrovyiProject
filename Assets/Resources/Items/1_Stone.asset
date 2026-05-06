@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f35df5678c92e774e9e04ad5f67a04a6, type: 3}
-  m_Name: Tree
+  m_Script: {fileID: 11500000, guid: edbc48651bf938744bc5d9c106dc77ad, type: 3}
+  m_Name: 1_Stone
   m_EditorClassIdentifier: 
-  _itemDrop:
-    _serializedList: []
+  _name: Stone
+  _icon: {fileID: 21300000, guid: 943a1cf597dcdf64697e7b02bba9866c, type: 3}
+  _id: 1
+  _reversedItem: {fileID: 0}
