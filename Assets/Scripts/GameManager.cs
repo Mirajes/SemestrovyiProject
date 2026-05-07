@@ -1,9 +1,17 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class GameManager : A_Singleton<GameManager>
 {
+    [Header("Core")]
+    [SerializeField] private States _state;
+    [SerializeField] private bool _inSleep;
+    [SerializeField] private Player _player;
+    [SerializeField] private CameraManager _cameraManager;
+    CancellationTokenSource _cts;
+
     // v drugoe mesto
     [Header("Sanity")]
     [SerializeField] private float _sanityCapacity_BASE = 100f;
@@ -11,11 +19,6 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private float _sanityRecoverySpeed = 3f;
     [SerializeField] private float _sanityRecoveryAmount = 10f;
 
-    [Header("Core")]
-    [SerializeField] private States _state;
-    [SerializeField] private bool _inSleep;
-    [SerializeField] private Player _player;
-    [SerializeField] private CameraManager _cameraManager;
 
     [Header("Pos")]
     [SerializeField] private Transform _homePos;
@@ -34,6 +37,8 @@ public class GameManager : A_Singleton<GameManager>
     {
         base.Awake();
 
+        _cts = new();
+
         StateChange += OnStateChange;
     }
 
@@ -41,7 +46,7 @@ public class GameManager : A_Singleton<GameManager>
     {
         // init
         _sanityRemaining = _sanityCapacity_BASE;
-
+        OnStateChange(_state);
     }
 
     private void OnDestroy()
@@ -57,7 +62,7 @@ public class GameManager : A_Singleton<GameManager>
                 _player.transform.position = _cyclePos.position;
                 _cameraManager.MainCamera.transform.position = _cameraManager.CyclePos.position;
 
-                
+                _cycleLogic.CycleTick(_cts.Token, null).Forget();
                 break;
             case States.Home:
                 _player.transform.position = _homePos.position;
