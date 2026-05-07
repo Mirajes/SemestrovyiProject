@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+
 public class CycleLogic
 {
-    private class FightLogic
+    List<Entity> _entities = new();
+
+    private Entity SpawnEntity()
     {
-
+        Entity entity = new();
+        return entity;
     }
-
 }
