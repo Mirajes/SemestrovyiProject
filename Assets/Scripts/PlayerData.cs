@@ -1,17 +1,23 @@
-using AYellowpaper.SerializedCollections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData
+public class PlayerData : MonoBehaviour
 {
-    private SerializedDictionary<Item_SO, int> _cycleInv;
-    private SerializedDictionary<Item_SO, int> _mainInv;
+    private MainInventory _mainInventory = new();
+    private CycleInventory _cycleInventory = new();
 
-    public SerializedDictionary<Item_SO, int> CycleInv => _cycleInv;
-    public SerializedDictionary<Item_SO, int> MainInv => _mainInv;
+    [SerializeField] private List<Item_SO> _cycleOrder = new();
+    [SerializeField] private List<Item_SO> _fightOrder = new();
 
-    public void ModifyInventory(ref SerializedDictionary<Item_SO, int> inventory, Item_SO item, int count)
-    {
-        Debug.Log($"modified {item} - [{count}] to {inventory}");
-        inventory[item] += count;
-    }
+    public MainInventory MainInventory => _mainInventory;
+    public CycleInventory CycleInventory => _cycleInventory;
+
+    public List<Item_SO> CycleOrder => _cycleOrder;
+    public List<Item_SO> FightOrder => _fightOrder;
 }
+
+//public void ModifyInventory(ref SerializedDictionary<Item_SO, int> inventory, Item_SO item, int count)
+//{
+//    Debug.Log($"modified {item} - [{count}] to {inventory}");
+//    inventory[item] += count;
+//}

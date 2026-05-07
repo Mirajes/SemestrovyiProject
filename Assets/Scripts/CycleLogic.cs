@@ -4,9 +4,10 @@ using System.Threading;
 
 public class CycleLogic
 {
-    List<Entity> _entities = new();
+    private List<Entity> _entities = new();
+    private Entity _currentEntity;
 
-    public async UniTask CycleTick(CancellationToken token, List<Item_SO> itemFlow)
+    public async UniTask CycleTick(CancellationToken token, List<Item_SO> cycleOrder)
     {
         while (true)
         {

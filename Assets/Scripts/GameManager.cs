@@ -9,8 +9,11 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private States _state;
     [SerializeField] private bool _inSleep;
     [SerializeField] private Player _player;
+    [SerializeField] private PlayerData _playerData;
     [SerializeField] private CameraManager _cameraManager;
     CancellationTokenSource _cts;
+    private CycleLogic _cycleLogic = new();
+    private HomeLogic _homeLogic = new();
 
     // v drugoe mesto
     [Header("Sanity")]
@@ -24,9 +27,6 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private Transform _homePos;
     [SerializeField] private Transform _cyclePos;
 
-    private PlayerData _playerData = new();
-    private CycleLogic _cycleLogic = new();
-    private HomeLogic _homeLogic = new();
 
     public PlayerData PlayerData => _playerData;
 
@@ -56,13 +56,18 @@ public class GameManager : A_Singleton<GameManager>
 
     private void OnStateChange(States state)
     {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
+        _cts = new();
+
         switch (state)
         {
             case States.Cycle:
                 _player.transform.position = _cyclePos.position;
                 _cameraManager.MainCamera.transform.position = _cameraManager.CyclePos.position;
 
-                _cycleLogic.CycleTick(_cts.Token, null).Forget();
+                _cycleLogic.CycleTick(_cts.Token, _playerData.CycleOrder).Forget();
                 break;
             case States.Home:
                 _player.transform.position = _homePos.position;
