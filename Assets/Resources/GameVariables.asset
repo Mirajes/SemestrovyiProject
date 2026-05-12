@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f35df5678c92e774e9e04ad5f67a04a6, type: 3}
-  m_Name: Tree
+  m_Script: {fileID: 11500000, guid: 3c534037184874143ba5c175334d8ab1, type: 3}
+  m_Name: GameVariables
   m_EditorClassIdentifier: 
-  _itemDrop:
-    _serializedList: []
+  _sanityCapacity_BASE: 100
+  _sanityRecoveryCD: 3
+  _sanityRecoveryAmount: 10
+  _maxCycleOrderCapacity: 1
+  _maxFightOrderCapacity: 1

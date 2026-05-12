@@ -97,9 +97,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4552698087783609581}
   - component: {fileID: 1867590661379228287}
-  - component: {fileID: 4362925065106056515}
+  - component: {fileID: 5770003348047700190}
   m_Layer: 0
-  m_Name: NPC_Test
+  m_Name: bolvan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.3501272, y: 2.6263971}
   m_EdgeRadius: 0
---- !u!114 &4362925065106056515
+--- !u!114 &5770003348047700190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,9 +176,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5711917655273513869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72a9ead0ac2052b4b8056fb68b2dfdc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 52007514953841542a0514f5c9637453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _EntityData: {fileID: 11400000, guid: 2ab1161480508984d919dad66a80c5e0, type: 2}
-  _MaxHealth: 3
-  _CurrentHealth: 0
+  _entity_SO: {fileID: 11400000, guid: 5952b3c436857e14a92f819d62320b0e, type: 2}

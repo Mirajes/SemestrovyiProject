@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class GameManager : A_Singleton<GameManager>
 {
+    [Header("Variables")]
+    [SerializeField] private GameVariables _gameVariables;
+    [SerializeField] private float _sanityRemaining;
+
     [Header("Core")]
     [SerializeField] private States _state;
     [SerializeField] private bool _inSleep;
@@ -15,14 +19,6 @@ public class GameManager : A_Singleton<GameManager>
     private CycleLogic _cycleLogic = new();
     private HomeLogic _homeLogic = new();
 
-    // v drugoe mesto
-    [Header("Sanity")]
-    [SerializeField] private float _sanityCapacity_BASE = 100f;
-    [SerializeField] private float _sanityRemaining;
-    [SerializeField] private float _sanityRecoverySpeed = 3f;
-    [SerializeField] private float _sanityRecoveryAmount = 10f;
-
-
     [Header("Pos")]
     [SerializeField] private Transform _homePos;
     [SerializeField] private Transform _cyclePos;
@@ -32,6 +28,13 @@ public class GameManager : A_Singleton<GameManager>
 
     public static Action<float> SanityUse;
     public static Action<States> StateChange;
+
+    #region Debug
+    [Header("debug")]
+    [SerializeField] private Entity _debug_bolvan;
+    public void debug_ToHome() => OnStateChange(States.Home);
+    public void debug_ToCycle() => OnStateChange(States.Cycle);
+    #endregion
 
     protected override void Awake()
     {
@@ -45,7 +48,7 @@ public class GameManager : A_Singleton<GameManager>
     private void Start()
     {
         // init
-        _sanityRemaining = _sanityCapacity_BASE;
+        _sanityRemaining = _gameVariables.SanityCapacity_BASE;
         OnStateChange(_state);
     }
 
@@ -67,7 +70,7 @@ public class GameManager : A_Singleton<GameManager>
                 _player.transform.position = _cyclePos.position;
                 _cameraManager.MainCamera.transform.position = _cameraManager.CyclePos.position;
 
-                _cycleLogic.CycleTick(_cts.Token, _playerData.CycleOrder).Forget();
+                _cycleLogic.CycleTask(_cts.Token, _playerData.CycleOrder).Forget();
                 break;
             case States.Home:
                 _player.transform.position = _homePos.position;
@@ -83,7 +86,6 @@ public class GameManager : A_Singleton<GameManager>
         _state = state;
     }
 
-
     private void OnSanityUse(float amount)
     {
         _sanityRemaining -= amount;
@@ -93,15 +95,11 @@ public class GameManager : A_Singleton<GameManager>
     {
         while (true)
         {
-            await UniTask.WaitWhile(() => _sanityRemaining < _sanityCapacity_BASE);
+            await UniTask.WaitWhile(() => _sanityRemaining < _gameVariables.SanityCapacity_BASE);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_sanityRecoverySpeed));
-            _sanityRemaining += _sanityRecoveryAmount;
+            await UniTask.Delay(TimeSpan.FromSeconds(_gameVariables.SanityRecoveryCD));
+            _sanityRemaining += _gameVariables.SamplingRecoveryAmount;
         }
     }
 
-    #region Debug
-    public void debug_ToHome() => OnStateChange(States.Home);
-    public void debug_ToCycle() => OnStateChange(States.Cycle);
-    #endregion
 }
