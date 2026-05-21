@@ -13,7 +13,7 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private States _state;
     [SerializeField] private bool _inSleep;
     [SerializeField] private Player _player;
-    [SerializeField] private PlayerData _playerData;
+    [SerializeField] private PlayerData _playerData = new();
     [SerializeField] private CameraManager _cameraManager;
     CancellationTokenSource _cts;
     private CycleLogic _cycleLogic = new();
@@ -23,7 +23,15 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private Transform _homePos;
     [SerializeField] private Transform _cyclePos;
 
-
+    public float SanityRemaining
+    {
+        get => _sanityRemaining;
+        set
+        {
+            _sanityRemaining = value;
+            GameUI.UpdateSanityBar?.Invoke(_gameVariables.SanityCapacity_BASE, value);
+        }
+    }
     public PlayerData PlayerData => _playerData;
 
     public static Action<float> SanityUse;
@@ -49,7 +57,18 @@ public class GameManager : A_Singleton<GameManager>
     {
         // init
         _sanityRemaining = _gameVariables.SanityCapacity_BASE;
+        SanityRecoveryTask().Forget();
         OnStateChange(_state);
+    }
+
+    private void OnEnable()
+    {
+        SanityUse += OnSanityUse;
+    }
+
+    private void OnDisable()
+    {
+        SanityUse -= OnSanityUse;
     }
 
     private void OnDestroy()
@@ -67,16 +86,10 @@ public class GameManager : A_Singleton<GameManager>
         switch (state)
         {
             case States.Cycle:
-                _player.transform.position = _cyclePos.position;
-                _cameraManager.MainCamera.transform.position = _cameraManager.CyclePos.position;
-
-                _cycleLogic.CycleTask(_cts.Token, _playerData.CycleOrder).Forget();
+                ToCycle();
                 break;
             case States.Home:
-                _player.transform.position = _homePos.position;
-                _cameraManager.MainCamera.transform.position = _cameraManager.HomePos.position;
-
-
+                ToHome();
                 break;
             default:
                 Debug.Log($"where {state}");
@@ -102,4 +115,18 @@ public class GameManager : A_Singleton<GameManager>
         }
     }
 
+
+    private void ToCycle()
+    {
+        _player.transform.position = _cyclePos.position;
+        _cameraManager.MainCamera.transform.position = _cameraManager.CyclePos.position;
+
+        _cycleLogic.CycleTask(_cts.Token, _playerData.CycleOrder, _playerData.BattleOrder).Forget();
+    }
+
+    private void ToHome()
+    {
+        _player.transform.position = _homePos.position;
+        _cameraManager.MainCamera.transform.position = _cameraManager.HomePos.position;
+    }
 }

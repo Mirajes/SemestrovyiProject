@@ -7,7 +7,9 @@ public class Entity_SO : ScriptableObject
     [SerializeField]
     [SerializedDictionary("Item", "Count")] private SerializedDictionary<Item_SO, int> _itemDrop;
     [SerializeField] private Entity _entity;
+    [SerializeField] private float _sanityUsage;
 
     public SerializedDictionary<Item_SO, int> ItemDrop => _itemDrop;
     public Entity Entity => _entity;
+    public float SanityUsage => _sanityUsage;
 }
