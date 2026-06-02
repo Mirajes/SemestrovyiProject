@@ -10,14 +10,20 @@ public class PlayerData
 
     [SerializeField] private PlayerState _playerState = PlayerState.InLoop;
 
-    // replaced A_Item => SO_Item cuz i cant debug it when abstract
     [SerializeField] private List<A_SO_Item> _loopOrder = new();
     [SerializeField] private List<A_SO_Item> _combatOrder = new();
 
-    public Action<float> ChangedIQ;
+    public static event Action<float> ChangedIQ;
+    public static event Action<PlayerState> ChangedPlayerState;
 
     public List<A_SO_Item> LoopOrder => _loopOrder;
     public List<A_SO_Item> CombatOrder => _combatOrder;
+    public PlayerState PlayerState => _playerState;
+
+    public void OnLauch()
+    {
+        _iqCurrent = _iqCapacity;
+    }
 
     public void OnEarnIQ(float iqAmount)
     {
@@ -33,8 +39,10 @@ public class PlayerData
         ChangedIQ?.Invoke(_iqCurrent);
     }
 
-    public void OnLauch()
+    public void OnChangeState(PlayerState state)
     {
-        _iqCurrent = _iqCapacity;
+        _playerState = state;
+
+        ChangedPlayerState?.Invoke(_playerState);
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class SaveManager // eto dolzhno bit' peredelano pod Yandex.Games
+public class SaveLogic // eto dolzhno bit' peredelano pod Yandex.Games
 {
     public static Action<SaveData> OnSave;
     public static Action<SaveData> OnLoad;

@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Stick_ItemSO
   m_EditorClassIdentifier: 
   _Roll_IQCost: 1
+  _gambleList:
+    _serializedList:
+    - Key: {fileID: 3040568849206013448, guid: 0549c4ff99d926a478cbd7265232d75f, type: 3}
+      Value: 1
   _Combat_IQCost: 1
-  _Damage: 1
+  _damage: 0

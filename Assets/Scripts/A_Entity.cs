@@ -8,6 +8,8 @@ public abstract class A_Entity : MonoBehaviour
     public virtual void Spawn()
     {
         _CurrentHealth = _EntityData.BaseHealth;
+
+        // + sound?
     }
 
     public virtual void TakeDamage(float damage)
@@ -18,23 +20,14 @@ public abstract class A_Entity : MonoBehaviour
             Death();
     }
 
-    public virtual void Death()
+    public virtual void Heal(float amount) // mb rewrite
     {
-
+        _CurrentHealth += amount;
+        if (_CurrentHealth > _EntityData.BaseHealth)
+            _CurrentHealth = _EntityData.BaseHealth;
     }
-}
 
-public class Player : A_Entity
-{
+    public virtual void Death() { }
 
-}
-
-public class Object : A_Entity
-{
-
-}
-
-public class NPC : A_Entity
-{
-
+    public virtual void Explore() { }
 }

@@ -6,7 +6,18 @@ using UnityEngine;
 [System.Serializable]
 public class Loop
 {
+    [SerializeField] private A_Entity _currentEntity;
+
     [SerializeField] private float _countCompletedLoops = 0;
+
+    [Header("Poses")]
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _entityTransformStart;
+    [SerializeField] private Transform _entityTransformEnd;
+
+    public Transform PlayerTransform => _playerTransform;
+    public Transform CameraTransform => _cameraTransform;
 
     CancellationTokenSource _cts;
 
@@ -33,15 +44,17 @@ public class Loop
 
             if (itemOrder.Count == 0)
             {
-                Debug.Log("walking");
+                Debug.Log("[Loop] - EmptyOrder");
                 await EmptyWalkTask();
                 continue;
             }
 
             foreach (var item in itemOrder)
             {
-                await EmptyWalkTask();
+                await WalkTask();
                 GameManager.UseIQ?.Invoke(item.Roll_IQCost);
+
+                _currentEntity = Gamble.RollEntity(item);
             }
 
             _countCompletedLoops++;
@@ -52,6 +65,11 @@ public class Loop
     {
         await UniTask.WaitForSeconds(1);
         _countCompletedLoops++;
+    }
+
+    private async UniTask WalkTask()
+    {
+        await UniTask.WaitForSeconds(1);
     }
 
     private async UniTask FightTask(CancellationToken token)
