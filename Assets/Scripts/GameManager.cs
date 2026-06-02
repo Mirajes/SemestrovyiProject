@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
         }
 
-        _loopLogic.Start();
+        _loopLogic.Start(_playerData);
     }
 
     private void OnEnable()

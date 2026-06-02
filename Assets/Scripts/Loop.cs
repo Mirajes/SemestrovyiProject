@@ -10,12 +10,12 @@ public class Loop
 
     CancellationTokenSource _cts;
 
-    public void Start()
+    public void Start(PlayerData playerData)
     {
         _cts = new();
 
         _countCompletedLoops = 0;
-        LoopTask(_cts.Token, new List<A_Item>()).Forget();
+        LoopTask(_cts.Token, playerData.LoopOrder).Forget();
     }
 
     public void End()
@@ -24,7 +24,7 @@ public class Loop
         _cts?.Dispose();
     }
 
-    private async UniTask LoopTask(CancellationToken token, List<A_Item> itemOrder)
+    private async UniTask LoopTask(CancellationToken token, List<A_SO_Item> itemOrder)
     {
         while (true)
         {
@@ -34,20 +34,21 @@ public class Loop
             if (itemOrder.Count == 0)
             {
                 Debug.Log("walking");
-                await WalkTask();
+                await EmptyWalkTask();
                 continue;
             }
 
             foreach (var item in itemOrder)
             {
-                GameManager.UseIQ?.Invoke(item.Data.IQCost);
+                await EmptyWalkTask();
+                GameManager.UseIQ?.Invoke(item.Roll_IQCost);
             }
 
             _countCompletedLoops++;
         }
     }
 
-    private async UniTask WalkTask()
+    private async UniTask EmptyWalkTask()
     {
         await UniTask.WaitForSeconds(1);
         _countCompletedLoops++;

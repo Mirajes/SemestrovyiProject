@@ -10,10 +10,14 @@ public class PlayerData
 
     [SerializeField] private PlayerState _playerState = PlayerState.InLoop;
 
-    private List<A_Item> _loopOrder = new();
-    private List<A_Item> _fightOrder = new();
+    // replaced A_Item => SO_Item cuz i cant debug it when abstract
+    [SerializeField] private List<A_SO_Item> _loopOrder = new();
+    [SerializeField] private List<A_SO_Item> _combatOrder = new();
 
     public Action<float> ChangedIQ;
+
+    public List<A_SO_Item> LoopOrder => _loopOrder;
+    public List<A_SO_Item> CombatOrder => _combatOrder;
 
     public void OnEarnIQ(float iqAmount)
     {
