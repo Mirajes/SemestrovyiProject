@@ -16,8 +16,8 @@ public class GameManager : A_Singleton<GameManager>
     [SerializeField] private PlayerData _playerData = new();
     [SerializeField] private CameraManager _cameraManager;
     CancellationTokenSource _cts;
-    private CycleLogic _cycleLogic = new();
-    private HomeLogic _homeLogic = new();
+    [SerializeField] private CycleLogic _cycleLogic = new();
+    [SerializeField] private HomeLogic _homeLogic = new();
 
     [Header("Pos")]
     [SerializeField] private Transform _homePos;

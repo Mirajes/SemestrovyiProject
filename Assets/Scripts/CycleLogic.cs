@@ -15,8 +15,8 @@ public class CycleLogic
     [SerializeField] private bool _isAttacking = false;
     [SerializeField] private float _walkTime = 1f;
 
-    private int _emptyWalkCount = 0;
-    private int _loopCount = 0;
+    [SerializeField] private int _emptyWalkCount = 0;
+    [SerializeField] private int _loopCount = 0;
 
     private UniTaskCompletionSource<bool> _walkActionSource;
     private CancellationTokenSource _battleCTS;
@@ -33,6 +33,7 @@ public class CycleLogic
 
         while (true)
         {
+            token.ThrowIfCancellationRequested();
             // no items
             if (cycleOrder.Count == 0)
             {
@@ -44,6 +45,7 @@ public class CycleLogic
             // have items
             foreach (var item in cycleOrder)
             {
+
                 Entity newEntity = GambleMachine.RollEntity(item);
                 _currentEntity = FactoryMachine.CreateEntity(newEntity, _entitySpawn.position);
 
@@ -91,7 +93,7 @@ public class CycleLogic
         _currentEntity = null;
 
         _battleCTS?.Cancel();
-        _battleCTS.Dispose();
+        _battleCTS?.Dispose();
     }
 
     //public async UniTask WalkActionTask(CancellationToken token)
