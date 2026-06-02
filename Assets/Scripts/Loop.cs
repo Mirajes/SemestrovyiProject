@@ -29,9 +29,11 @@ public class Loop
         while (true)
         {
             await UniTask.Yield(); // no lag pls
+            token.ThrowIfCancellationRequested();
 
             if (itemOrder.Count == 0)
             {
+                Debug.Log("walking");
                 await WalkTask();
                 continue;
             }
@@ -45,13 +47,16 @@ public class Loop
         }
     }
 
-    private UniTask WalkTask()
+    private async UniTask WalkTask()
     {
+        await UniTask.WaitForSeconds(1);
         _countCompletedLoops++;
-        return UniTask.CompletedTask;
     }
 
-    private async UniTask FightTask(CancellationToken token) { }
+    private async UniTask FightTask(CancellationToken token)
+    {
+        await UniTask.CompletedTask;
+    }
 }
 
 [System.Serializable]
