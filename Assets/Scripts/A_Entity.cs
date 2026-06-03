@@ -12,12 +12,18 @@ public abstract class A_Entity : MonoBehaviour
         // + sound?
     }
 
+    public virtual void MoveTo(Transform newTransform)
+    {
+        this.transform.position = newTransform.position;
+        this.transform.rotation = newTransform.rotation;
+    }
+
     public virtual void TakeDamage(float damage)
     {
         _CurrentHealth -= damage;
 
         if (_CurrentHealth <= 0)
-            Death();
+            Destroy(this.gameObject);
     }
 
     public virtual void Heal(float amount) // mb rewrite
@@ -27,7 +33,15 @@ public abstract class A_Entity : MonoBehaviour
             _CurrentHealth = _EntityData.BaseHealth;
     }
 
-    public virtual void Death() { }
+    protected virtual void Death() 
+    {
+        Loop.OnEntityCS?.Invoke();
+    }
+
+    protected virtual void OnDestroy()
+    {
+        Death();
+    }
 
     public virtual void Explore() { }
 }

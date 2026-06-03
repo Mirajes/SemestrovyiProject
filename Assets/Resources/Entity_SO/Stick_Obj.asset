@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2daa8fdddff05d4d997047dad1d89ad, type: 3}
   m_Name: Stick_Obj
   m_EditorClassIdentifier: 
+  _entityObj: {fileID: 3040568849206013448, guid: 0549c4ff99d926a478cbd7265232d75f, type: 3}
   _HEALTH_BASE: 2
+  _drop:
+    _serializedList: []

@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private CursorManager _cursorManager;
 
     [Header("Player")]
     [SerializeField] private PlayerEntity _playerEntity;
@@ -13,7 +14,8 @@ public class GameManager : MonoBehaviour
     [Header("Home")]
     [SerializeField] private Home _homeLogic = new();
 
-    [SerializeField] private SaveLogic _saveLogic = new();
+    private SaveLogic _saveLogic = new();
+    private InputHandler _inputHandler = new();
 
     public static Action<float> EarnIQ;
     public static Action<float> UseIQ;
@@ -21,8 +23,8 @@ public class GameManager : MonoBehaviour
 
     [Header("States")]
     [SerializeField] private bool _isTutorialCompleted = false;
-    [SerializeField] private bool _isAFK = false;
-    [SerializeField] private bool _isInDialogue = false;
+    //[SerializeField] private bool _isAFK = false;
+    //[SerializeField] private bool _isInDialogue = false;
 
     private void Awake()
     {
@@ -34,6 +36,11 @@ public class GameManager : MonoBehaviour
         #region Debug
         _uiManager.UpdateButton_debug(_playerData.PlayerState);
         #endregion
+
+        _inputHandler.Init();
+        _inputHandler.InitInputs(_cursorManager);
+        _inputHandler.Inputs.Enable();
+
         _loopLogic.Start(_playerData);
     }
 
@@ -41,16 +48,25 @@ public class GameManager : MonoBehaviour
     {
         EarnIQ += _playerData.OnEarnIQ;
         UseIQ += _playerData.OnUseIQ;
-        ChangeState += _playerData.OnChangeState;
         ChangeState += OnChangeState;
+        ChangeState += _playerData.OnChangeState;
+        ChangeState += _loopLogic.OnChangeState;
     }
 
     private void OnDisable()
     {
         EarnIQ -= _playerData.OnEarnIQ;
         UseIQ -= _playerData.OnUseIQ;
-        ChangeState -= _playerData.OnChangeState;
         ChangeState -= OnChangeState;
+        ChangeState -= _playerData.OnChangeState;
+        ChangeState -= _loopLogic.OnChangeState;
+    }
+
+    private void OnDestroy()
+    {
+        _inputHandler.RemoveInputs(_cursorManager);
+        _inputHandler.Inputs?.Disable();
+        _inputHandler.Inputs?.Dispose();
     }
 
     private void OnChangeState(PlayerState newState)
@@ -58,6 +74,7 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case PlayerState.InLoop:
+                _loopLogic.Start(_playerData);
                 _playerEntity.MoveTo(_loopLogic.PlayerTransform);
                 break;
             case PlayerState.InHome:
