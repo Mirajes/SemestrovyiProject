@@ -7,7 +7,7 @@ public class Gamble
     // weight System to future
     public static SO_Entity RollEntity(A_SO_Item item)
     {
-        if (item.GambleList.Count == 0) { Debug.Log($"[Gamble] - no entity in list [{item}]"); return null; }
+        if (item.GambleList.Count == 0) { Debug.LogWarning($"[Gamble] - no entity in list [{item}]"); return null; }
 
         float totalChance = 0;
         float currentChance = 0;

@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private CursorManager _cursorManager;
+    [SerializeField] private CameraManager _cameraManager;
 
     [Header("Player")]
     [SerializeField] private PlayerEntity _playerEntity;
@@ -77,9 +78,11 @@ public class GameManager : MonoBehaviour
         {
             case PlayerState.InLoop:
                 _loopLogic.Start();
+                _cameraManager.MoveCameraTo(Camera.main, _loopLogic.CameraTransform, 0.5f);
                 _playerEntity.MoveTo(_loopLogic.PlayerTransform, 0.3f);
                 break;
             case PlayerState.InHome:
+                _cameraManager.MoveCameraTo(Camera.main, _homeLogic.CameraTransform, 0.5f);
                 _playerEntity.MoveTo(_homeLogic.PlayerTransform, 0.3f);
                 break;
             default:

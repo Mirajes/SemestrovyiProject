@@ -1,13 +1,12 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
 public class Loop
 {
-    [SerializeField] private A_Entity _currentEntity;
+    [SerializeField] private static A_Entity _currentEntity;
 
     [SerializeField] private float _countCompletedLoops = 0;
     [SerializeField] private Fight _combatLogic = new();
@@ -24,7 +23,8 @@ public class Loop
 
     public Transform PlayerTransform => _playerTransform;
     public Transform CameraTransform => _cameraTransform;
-
+    public static A_Entity CurrentEntity => _currentEntity; // STATIC <=
+    
     public static Action OnEntityCS;
     //public static Action OnWalkCS;
 
@@ -59,57 +59,51 @@ public class Loop
         _fight_cts?.Cancel();
         _fight_cts?.Dispose();
 
-        FactoryMachine.DestroyEntity(_currentEntity);
-        _currentEntity = null;
+        if (_currentEntity != null)
+        {
+            FactoryMachine.DestroyEntity(_currentEntity);
+            _currentEntity = null;
+        }
     }
 
     private async UniTask LoopTask(CancellationToken coreToken)
     {
         var itemOrder = _playerData.LoopOrder;
 
-        while (_playerData.PlayerState == PlayerState.InLoop)
+        while (!coreToken.IsCancellationRequested)
         {
-            await UniTask.Yield(); // no lag pls
-            if (coreToken.IsCancellationRequested)
-                break;
-            //coreToken.ThrowIfCancellationRequested();
+            await UniTask.Yield();
 
             if (itemOrder.Count == 0)
             {
-                Debug.Log("[Loop] - EmptyOrder");
                 await EmptyWalkTask(coreToken);
                 continue;
             }
 
             foreach (var item in itemOrder)
             {
-                if (coreToken.IsCancellationRequested)
-                    break;
-                //coreToken.ThrowIfCancellationRequested();
-
                 _fight_cts = new();
+                SO_Entity entitySO = Gamble.RollEntity(item);
 
-                SO_Entity entityData = Gamble.RollEntity(item);
-                _currentEntity = FactoryMachine.CreateEntity(entityData, _entityTransformStart.position);
-                
+                if (entitySO == null) { Debug.LogWarning($"[Loop] - no entity in {item}"); continue; }
+                _currentEntity = FactoryMachine.CreateEntity(entitySO, _entityTransformStart.position);
+
                 if (_isAutoWalking)
                 {
+                    _currentEntity.MoveTo(_entityTransformEnd, 1f);
                     await WalkTask(coreToken);
                 }
                 else
                 {
-                    _walk_CS = new();
-                    await _walk_CS.Task.AttachExternalCancellation(coreToken);
+                    // ??? CompletionSource?
                 }
-                _currentEntity.MoveTo(_entityTransformEnd, 1f);
-
-                GameManager.UseIQ?.Invoke(item.Roll_IQCost);
-
-                _combatLogic.FightTask(_fight_cts.Token, _currentEntity).Forget();
 
                 _entity_CS = new();
-                await _entity_CS.Task.AttachExternalCancellation(coreToken);
 
+                GameManager.UseIQ?.Invoke(item.Roll_IQCost);
+                _combatLogic.FightTask(_fight_cts.Token, _currentEntity).Forget();
+
+                await _entity_CS.Task.AttachExternalCancellation(coreToken);
                 _fight_cts?.Cancel();
                 _fight_cts?.Dispose();
             }
@@ -120,6 +114,7 @@ public class Loop
 
     private async UniTask EmptyWalkTask(CancellationToken token)
     {
+        Debug.Log("[Loop] -- EmptyOrder");
         await UniTask.WaitForSeconds(1, cancellationToken: token);
         _countCompletedLoops++;
     }

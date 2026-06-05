@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1878bfe4f51a76b4ab08dab8f6bd6073, type: 3}
   m_Name: Item_Stick
   m_EditorClassIdentifier: 
+  _Name: Stick
+  _Sprite: {fileID: 21300000, guid: 91c1559dff3056a4ca27b95fb286b1bf, type: 3}
   _Roll_IQCost: 1
   _gambleList:
     _serializedList:

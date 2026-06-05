@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fbf5e67235779439c6a29221c9affe, type: 3}
   m_Name: Item_Rock
   m_EditorClassIdentifier: Assembly-CSharp::Rock
+  _Name: Rock
+  _Sprite: {fileID: 21300000, guid: 3cf16333a4c17014aa506be56411c262, type: 3}
   _Roll_IQCost: 2
+  _gambleList:
+    _serializedList: []
   _Combat_IQCost: 0
-  _Damage: 0
+  _FillingTime: 0.7

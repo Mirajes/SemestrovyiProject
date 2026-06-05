@@ -18,16 +18,16 @@ public class Fight
     */
     public async UniTask FightTask(CancellationToken token, A_Entity entity)
     {
-        while (true)
+        while (!token.IsCancellationRequested)
         {
             await UniTask.Yield(token);
-            if (token.IsCancellationRequested || !entity)
+            if (!entity)
                 break;
 
             foreach (var item in _playerData.CombatOrder) // neobhodimo proveryat' na izmeneniya
             {
                 await UniTask.Delay(System.TimeSpan.FromSeconds(item.FillingTime), cancellationToken: token);
-                item.Use(entity); // eto gavno potomushto esli buget [Player => heal] pridetca iz drugovo mesta brat'
+                item.Use(); // eto gavno potomushto esli buget [Player => heal] pridetca iz drugovo mesta brat'
             }
         }
     }
