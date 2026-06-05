@@ -20,7 +20,7 @@ public class PlayerData
     public List<A_SO_Item> CombatOrder => _combatOrder;
     public PlayerState PlayerState => _playerState;
 
-    public void OnLauch()
+    public void OnLaunch()
     {
         _iqCurrent = _iqCapacity;
     }

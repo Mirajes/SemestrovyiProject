@@ -30,36 +30,38 @@ public class GameManager : MonoBehaviour
     {
         if (!_isTutorialCompleted)
         {
-            _playerData.OnLauch();
+            _playerData.OnLaunch();
 
         }
         #region Debug
         _uiManager.UpdateButton_debug(_playerData.PlayerState);
         #endregion
 
+        _loopLogic.OnLaunch(_playerData);
+
         _inputHandler.Init();
         _inputHandler.InitInputs(_cursorManager);
         _inputHandler.Inputs.Enable();
 
-        _loopLogic.Start(_playerData);
+        _loopLogic.Start();
     }
 
     private void OnEnable()
     {
         EarnIQ += _playerData.OnEarnIQ;
         UseIQ += _playerData.OnUseIQ;
-        ChangeState += OnChangeState;
         ChangeState += _playerData.OnChangeState;
         ChangeState += _loopLogic.OnChangeState;
+        ChangeState += OnChangeState;
     }
 
     private void OnDisable()
     {
         EarnIQ -= _playerData.OnEarnIQ;
         UseIQ -= _playerData.OnUseIQ;
-        ChangeState -= OnChangeState;
         ChangeState -= _playerData.OnChangeState;
         ChangeState -= _loopLogic.OnChangeState;
+        ChangeState -= OnChangeState;
     }
 
     private void OnDestroy()
@@ -74,11 +76,11 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case PlayerState.InLoop:
-                _loopLogic.Start(_playerData);
-                _playerEntity.MoveTo(_loopLogic.PlayerTransform);
+                _loopLogic.Start();
+                _playerEntity.MoveTo(_loopLogic.PlayerTransform, 0.3f);
                 break;
             case PlayerState.InHome:
-                _playerEntity.MoveTo(_homeLogic.PlayerTransform);
+                _playerEntity.MoveTo(_homeLogic.PlayerTransform, 0.3f);
                 break;
             default:
                 Debug.Log($"[GameManager] - where are we [{newState}]");

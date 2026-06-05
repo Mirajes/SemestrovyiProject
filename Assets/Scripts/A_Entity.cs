@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public abstract class A_Entity : MonoBehaviour
@@ -12,9 +13,9 @@ public abstract class A_Entity : MonoBehaviour
         // + sound?
     }
 
-    public virtual void MoveTo(Transform newTransform)
+    public virtual void MoveTo(Transform newTransform, float time)
     {
-        this.transform.position = newTransform.position;
+        this.transform.DOMove(newTransform.position, time);
         this.transform.rotation = newTransform.rotation;
     }
 
@@ -23,7 +24,10 @@ public abstract class A_Entity : MonoBehaviour
         _CurrentHealth -= damage;
 
         if (_CurrentHealth <= 0)
+        {
+            Kill();
             Destroy(this.gameObject);
+        }
     }
 
     public virtual void Heal(float amount) // mb rewrite
@@ -33,14 +37,15 @@ public abstract class A_Entity : MonoBehaviour
             _CurrentHealth = _EntityData.BaseHealth;
     }
 
-    protected virtual void Death() 
+    protected virtual void Kill() 
     {
         Loop.OnEntityCS?.Invoke();
     }
 
     protected virtual void OnDestroy()
     {
-        Death();
+        DOTween.Kill(this.transform);
+
     }
 
     public virtual void Explore() { }

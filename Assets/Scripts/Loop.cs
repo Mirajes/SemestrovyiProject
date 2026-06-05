@@ -12,6 +12,7 @@ public class Loop
     [SerializeField] private float _countCompletedLoops = 0;
     [SerializeField] private Fight _combatLogic = new();
 
+    private PlayerData _playerData;
     [SerializeField] private bool _isAutoWalking = false;
     [SerializeField] private bool _isAttacking = false;
 
@@ -25,20 +26,27 @@ public class Loop
     public Transform CameraTransform => _cameraTransform;
 
     public static Action OnEntityCS;
+    //public static Action OnWalkCS;
 
     CancellationTokenSource _loop_cts;
     CancellationTokenSource _fight_cts;
     UniTaskCompletionSource _walk_CS;
     UniTaskCompletionSource _entity_CS; // CS - CompletionSource
 
-    public void Start(PlayerData playerData)
+    public void OnLaunch(PlayerData playerData)
+    {
+        _playerData = playerData;
+        _combatLogic.OnLaunch(playerData);
+    }
+
+    public void Start()
     {
         OnEntityCS += OnTriggerEntityCS;
 
         _loop_cts = new();
 
         _countCompletedLoops = 0;
-        LoopTask(_loop_cts.Token, playerData.LoopOrder, playerData.CombatOrder).Forget();
+        LoopTask(_loop_cts.Token).Forget();
     }
 
     public void End()
@@ -55,9 +63,11 @@ public class Loop
         _currentEntity = null;
     }
 
-    private async UniTask LoopTask(CancellationToken coreToken, List<A_SO_Item> itemOrder, List<A_SO_Item> combatOrder)
+    private async UniTask LoopTask(CancellationToken coreToken)
     {
-        while (true)
+        var itemOrder = _playerData.LoopOrder;
+
+        while (_playerData.PlayerState == PlayerState.InLoop)
         {
             await UniTask.Yield(); // no lag pls
             if (coreToken.IsCancellationRequested)
@@ -77,6 +87,8 @@ public class Loop
                     break;
                 //coreToken.ThrowIfCancellationRequested();
 
+                _fight_cts = new();
+
                 SO_Entity entityData = Gamble.RollEntity(item);
                 _currentEntity = FactoryMachine.CreateEntity(entityData, _entityTransformStart.position);
                 
@@ -89,12 +101,11 @@ public class Loop
                     _walk_CS = new();
                     await _walk_CS.Task.AttachExternalCancellation(coreToken);
                 }
-                _currentEntity.MoveTo(_entityTransformEnd);
+                _currentEntity.MoveTo(_entityTransformEnd, 1f);
 
                 GameManager.UseIQ?.Invoke(item.Roll_IQCost);
 
-                _fight_cts = new();
-                _combatLogic.FightTask(_fight_cts.Token, _currentEntity, combatOrder).Forget();
+                _combatLogic.FightTask(_fight_cts.Token, _currentEntity).Forget();
 
                 _entity_CS = new();
                 await _entity_CS.Task.AttachExternalCancellation(coreToken);
