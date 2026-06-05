@@ -327,8 +327,7 @@ Transform:
   m_LocalPosition: {x: 4.02, y: -1.74, z: -8.99938}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1429759270}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &286978677
@@ -606,6 +605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418652493}
   - component: {fileID: 418652494}
+  - component: {fileID: 418652495}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -643,6 +643,23 @@ MonoBehaviour:
   _inventory: {fileID: 0}
   _toLoop: {fileID: 427955221}
   _toHome: {fileID: 1667727606}
+--- !u!114 &418652495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418652492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498aed53712d2ed438d1560278b8e547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inventoryButton: {fileID: 1166080848}
+  _inventoryWindow: {fileID: 1701663467}
+  _inventorySlotPrefab: {fileID: 0}
+  _mainInventoryContainer: {fileID: 0}
+  _loopInventoryContainer: {fileID: 0}
 --- !u!1 &427955219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,8 +1690,15 @@ MonoBehaviour:
     _loopOrder:
     - {fileID: 11400000, guid: b8688f3fc7fd3ec4c8e8c772431fcc77, type: 2}
     _combatOrder:
-    - {fileID: 11400000, guid: cc9c743dd92ade944a203690160200ff, type: 2}
+    - {fileID: 11400000, guid: b8688f3fc7fd3ec4c8e8c772431fcc77, type: 2}
+    _mainInventory:
+      _Inventory:
+        _serializedList: []
+    _loopInventory:
+      _Inventory:
+        _serializedList: []
   _loopLogic:
+    _currentEntity: {fileID: 0}
     _countCompletedLoops: 0
     _isAutoWalking: 1
     _isAttacking: 0
@@ -2716,7 +2740,7 @@ GameObject:
   - component: {fileID: 1340684454}
   - component: {fileID: 1340684453}
   m_Layer: 5
-  m_Name: Content
+  m_Name: MainContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2962,12 +2986,12 @@ Transform:
   m_GameObject: {fileID: 1429759269}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 9}
+  m_LocalPosition: {x: 4.02, y: -3.24, z: 0.0006198883}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1873532637}
-  m_Father: {fileID: 277328696}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1429759271
 MonoBehaviour:
@@ -2981,8 +3005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654af8977bf259b4cbfdd5e6a4d75463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthBar: {fileID: 1429759270}
-  _healthFill: {fileID: 1873532637}
+  _healthBar: {fileID: 1873532637}
+  _healthFill: {fileID: 1891328372}
 --- !u!1 &1449407987
 GameObject:
   m_ObjectHideFlags: 0
@@ -4015,6 +4039,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _EntityData: {fileID: 0}
   _CurrentHealth: 0
+  _IsMouseHolding: 0
+  _CursorSpeed: 0
   _rb2D: {fileID: 1847664065}
 --- !u!50 &1847664065
 Rigidbody2D:
@@ -4950,4 +4976,5 @@ SceneRoots:
   - {fileID: 1613637072}
   - {fileID: 1786387979}
   - {fileID: 349593953}
+  - {fileID: 1429759270}
   - {fileID: 1284795926}

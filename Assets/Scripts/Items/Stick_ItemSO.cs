@@ -7,7 +7,7 @@ public class Stick_ItemSO : A_SO_Item
 
     public override void Use()
     {
-        if (Loop.CurrentEntity != null)
-            Loop.CurrentEntity.TakeDamage(_damage);
+        if (_CurrentEntity != null)
+            _CurrentEntity.TakeDamage(_damage);
     }
 }

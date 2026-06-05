@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,11 +17,18 @@ public class CursorManager : MonoBehaviour
     public bool IsHolding => _isHolding;
     public float CursorSpeed => _cursorSpeed;
 
+    public static event Action<bool> IsMouseHolding;
+    public static event Action<float> CursorSpeedCalc;
+
     private void Update()
     {
         if (!_isHolding)
         {
             _cursorSpeed = 0f;
+
+            IsMouseHolding?.Invoke(IsHolding);
+            CursorSpeedCalc?.Invoke(CursorSpeed);
+
             return;
         }
 
@@ -33,6 +41,9 @@ public class CursorManager : MonoBehaviour
             _cursorSpeed = 0;
         else if (_cursorSpeed  > _maxPassDistance)
             _cursorSpeed = _maxPassDistance;
+
+        IsMouseHolding?.Invoke(IsHolding);
+        CursorSpeedCalc?.Invoke(CursorSpeed);
     }
 
     public void OnCursorInput(InputAction.CallbackContext context)

@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class Loop
 {
-    [SerializeField] private static A_Entity _currentEntity;
+    [SerializeField] private A_Entity _currentEntity;
 
     [SerializeField] private float _countCompletedLoops = 0;
     [SerializeField] private Fight _combatLogic = new();
@@ -23,8 +23,9 @@ public class Loop
 
     public Transform PlayerTransform => _playerTransform;
     public Transform CameraTransform => _cameraTransform;
-    public static A_Entity CurrentEntity => _currentEntity; // STATIC <=
-    
+
+    public static Action<A_Entity> EntitySpawn;
+
     public static Action OnEntityCS;
     //public static Action OnWalkCS;
 
@@ -87,6 +88,7 @@ public class Loop
 
                 if (entitySO == null) { Debug.LogWarning($"[Loop] - no entity in {item}"); continue; }
                 _currentEntity = FactoryMachine.CreateEntity(entitySO, _entityTransformStart.position);
+                EntitySpawn?.Invoke(_currentEntity);
 
                 if (_isAutoWalking)
                 {
@@ -101,9 +103,9 @@ public class Loop
                 _entity_CS = new();
 
                 GameManager.UseIQ?.Invoke(item.Roll_IQCost);
-                _combatLogic.FightTask(_fight_cts.Token, _currentEntity).Forget();
+                await _combatLogic.FightTask(_fight_cts.Token, _currentEntity);
 
-                await _entity_CS.Task.AttachExternalCancellation(coreToken);
+                //await _entity_CS.Task.AttachExternalCancellation(coreToken);
                 _fight_cts?.Cancel();
                 _fight_cts?.Dispose();
             }

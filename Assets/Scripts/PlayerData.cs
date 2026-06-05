@@ -13,12 +13,17 @@ public class PlayerData
     [SerializeField] private List<A_SO_Item> _loopOrder = new();
     [SerializeField] private List<A_SO_Item> _combatOrder = new();
 
+    [SerializeField] private MainInventory _mainInventory = new();
+    [SerializeField] private LoopInventory _loopInventory = new();
+
     public static event Action<float> ChangedIQ;
     public static event Action<PlayerState> ChangedPlayerState;
 
+    public PlayerState PlayerState => _playerState;
     public List<A_SO_Item> LoopOrder => _loopOrder;
     public List<A_SO_Item> CombatOrder => _combatOrder;
-    public PlayerState PlayerState => _playerState;
+    public MainInventory MainInventory => _mainInventory;
+    public LoopInventory LoopInventory => _loopInventory;
 
     public void OnLaunch()
     {
